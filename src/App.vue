@@ -4,27 +4,26 @@
       
     </v-app-bar> -->
 
-    <v-content>
-      <CasesByDayChart />
-    </v-content>
+    <v-container>
+      <v-row>
+        <v-col cols="12">
+          <p class="display-2">Finland COVID-19 data</p>
+        </v-col>
+      </v-row>
+
+      <v-content>
+        <router-view></router-view>
+      </v-content>
+    </v-container>
   </v-app>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import store from "./store";
-import CasesByDayChart from "./components/CasesByDayChart.vue";
 
 export default Vue.extend({
   name: "App",
-
-  components: {
-    CasesByDayChart
-  },
-
-  data: () => ({
-    //
-  }),
 
   mounted() {
     store.dispatch('virusCasesFinland/fetchData');
