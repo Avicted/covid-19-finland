@@ -9,9 +9,17 @@ const getDefaultState = () => {
 // initial state
 const state = getDefaultState()
 
+// getters
+const getters = {
+    confirmed: (state: any) => state.confirmed,
+    deaths: (state: any) => state.deaths,
+    recovered: (state: any) => state.recovered,
+}
+
+
 // actions
 const actions = {
-    fetchVirusCases({ commit }: any)  {         
+    fetchData({ commit }: any)  {         
         fetch("https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/finnishCoronaData")
         .then(response => response.json() as Promise<any[]>)
         .then((response) => {
@@ -35,6 +43,7 @@ const mutations = {
 export default {
     namespaced: true,
     state,
+    getters,
     actions,
     mutations
 }

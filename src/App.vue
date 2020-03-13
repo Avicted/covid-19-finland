@@ -27,7 +27,7 @@ export default Vue.extend({
   }),
 
   mounted() {
-    store.dispatch('virusCasesFinland/fetchVirusCases');
+    store.dispatch('virusCasesFinland/fetchData');
   }
 });
 </script>
