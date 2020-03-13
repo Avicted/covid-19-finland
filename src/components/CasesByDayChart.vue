@@ -28,6 +28,7 @@
 import Vue from "vue";
 import store from "../store";
 import VueApexCharts from 'vue-apexcharts';
+import moment from "moment";
 
 export default Vue.extend({
   name: "CasesByDayChart",
@@ -68,41 +69,64 @@ export default Vue.extend({
   methods: {
     fetchChartData() {
       const confirmedCases = store.getters['virusCasesFinland/confirmed'];
-        const confirmedCasesCount = confirmedCases.length;
+      const confirmedCasesCount = confirmedCases.length;
+      const confirmedCasesByDay: string|any[] = [];
+      
+      const generatedDates = [];
+      const todaysDate = new Date().toISOString();
+      let oldestDate = new Date().toISOString();
 
-        const confirmedCasesByDay: string|any[] = [];
+      for (let i = 0; i < confirmedCasesCount; i++) {
+        const datetime = confirmedCases[i].date;
+        const date = new Date(datetime).toISOString().substr(0, 10);
+        const milliseconds = new Date(date).getTime(); 
 
-        for (let i = 0; i < confirmedCasesCount; i++) {
-          const datetime = confirmedCases[i].date;
-          const date = new Date(datetime).toISOString().substr(0, 10);
-          const milliseconds = new Date(date).getTime(); 
-          
-          // Is the current date already stored? If so, increment the case count
-          const processedDatesCount = confirmedCasesByDay.length;
-          let dateAlreadyProcessed = false;
-
-          for (let i = 0; i < processedDatesCount; i++) {
-            const currentMilliseconds = confirmedCasesByDay[i][0];
-
-            if (currentMilliseconds === milliseconds) {
-              confirmedCasesByDay[i][1] = confirmedCasesByDay[i][1] + 1;
-              dateAlreadyProcessed = true;
-              break;
-            }
-          }
-
-          // If not store it
-          if (!dateAlreadyProcessed) {
-            confirmedCasesByDay.push([milliseconds, 1]);
-          }
+        if (Date.parse(datetime) < Date.parse(oldestDate)) {
+          oldestDate = datetime;
         }
 
-        // Example data format: data: [[1324508400000, 34], [1324594800000, 54]]
-        // Format the final data for the chart
+        // Is the current date already stored? If so, increment the case count
         const processedDatesCount = confirmedCasesByDay.length;
+        let dateAlreadyProcessed = false;
+
         for (let i = 0; i < processedDatesCount; i++) {
-          this.$data.series[0].data.push(confirmedCasesByDay[i])
+          const currentMilliseconds = confirmedCasesByDay[i][0];
+
+          if (currentMilliseconds === milliseconds) {
+            confirmedCasesByDay[i][1] = confirmedCasesByDay[i][1] + 1;
+            dateAlreadyProcessed = true;
+            break;
+          }
         }
+
+        // If not store it
+        if (!dateAlreadyProcessed) {
+          confirmedCasesByDay.push([milliseconds, 1]);
+        }
+      }
+
+      // Generate missing dates
+      const today = moment(todaysDate);
+      const oldest = moment(oldestDate);
+
+      for (let m = moment(oldest); m.diff(today, 'days') <= 0; m.add(1, 'days')) {
+        const currentMilliseconds = new Date(m.format('YYYY-MM-DD')).getTime();
+        generatedDates.push([currentMilliseconds, 0]);
+      }
+
+      // Assign the data to the generated dates
+      for (let i = 0; i < generatedDates.length; i++) {
+        for (let j = 0; j < confirmedCasesByDay.length; j++) {
+          const currentCaseDate = confirmedCasesByDay[j][0];
+          if (currentCaseDate === generatedDates[i][0]) {
+            generatedDates[i][1] = generatedDates[i][1] + confirmedCasesByDay[j][1];
+          }
+        }
+      }
+
+      for (let i = 0; i < generatedDates.length; i++) {
+        this.$data.series[0].data.push(generatedDates[i])
+      }
 
       this.$data.isLoading = false;
     }
