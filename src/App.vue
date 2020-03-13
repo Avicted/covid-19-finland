@@ -1,11 +1,11 @@
 <template>
   <v-app>
-    <v-app-bar app dense color="primary" dark>
+    <!-- <v-app-bar app dense color="primary" dark>
       
-    </v-app-bar>
+    </v-app-bar> -->
 
     <v-content>
-      <HelloWorld />
+      <CasesByDayChart />
     </v-content>
   </v-app>
 </template>
@@ -13,13 +13,13 @@
 <script lang="ts">
 import Vue from "vue";
 import store from "./store";
-import HelloWorld from "./components/HelloWorld.vue";
+import CasesByDayChart from "./components/CasesByDayChart.vue";
 
 export default Vue.extend({
   name: "App",
 
   components: {
-    HelloWorld
+    CasesByDayChart
   },
 
   data: () => ({
