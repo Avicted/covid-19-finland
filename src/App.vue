@@ -7,7 +7,7 @@
     <v-container>
       <v-row>
         <v-col cols="12">
-          <p class="display-2">Finland COVID-19 data</p>
+          <p class="display-1">Finland COVID-19 data</p>
         </v-col>
       </v-row>
 

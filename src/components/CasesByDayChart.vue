@@ -1,6 +1,26 @@
 <template>
-  <v-card>
-    <apexchart v-if="series[0].data !== null && isLoading == false" type="bar" :options="options" :series="series"></apexchart>
+  <v-card 
+    min-height="500px"
+    max-height="500px"
+    >
+    <v-card-title>
+      Reported infections by day
+    </v-card-title>
+
+    <v-progress-circular
+      v-if="series[0].data == null || isLoading == true" 
+      id="progress-loader"
+      :size="50"
+      color="primary"
+      indeterminate
+    ></v-progress-circular>
+    <apexchart 
+      v-else
+      width="100%"
+      height="80%"
+      :options="options" 
+      :series="series">
+    </apexchart>
   </v-card>
 </template>
 
@@ -16,25 +36,38 @@ export default Vue.extend({
     isLoading: true,
     options: {
       chart: {
-        width: '100%',
-        height: '100',
+        stacked: false,
+        type: 'bar',
+        toolbar: {
+          show: false,
+        },
       },
       xaxis: {
         type: 'datetime',
       },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: '75%',
+        },
+      },
+      dataLabels: {
+        enabled: false
+      },
+      legend: {
+        show: true,
+        position: 'bottom',
+      },
     },
     series: [{
-      name: 'Confirmed cases',
+      name: 'New infections',
       data: []
     }]
   }),
 
-  mounted() {
-    this.$data.isLoading = true;
-
-    this.$store.subscribe((mutation, state) => {
-      if (mutation.type === 'virusCasesFinland/DATA_FETCHED') {
-        const confirmedCases = store.getters['virusCasesFinland/confirmed'];
+  methods: {
+    fetchChartData() {
+      const confirmedCases = store.getters['virusCasesFinland/confirmed'];
         const confirmedCasesCount = confirmedCases.length;
 
         const confirmedCasesByDay: string|any[] = [];
@@ -44,17 +77,6 @@ export default Vue.extend({
           const date = new Date(datetime).toISOString().substr(0, 10);
           const milliseconds = new Date(date).getTime(); 
           
-          /*
-            datetime:"2020-01-29T11:00:00.000Z"
-            date: "2020-01-29"
-            milliseconds: 1580256000000
-            healthCareDistrict:"Lappi"
-            id:"1"
-            infectionSource:"unknown"
-            infectionSourceCountry:"CHN"
-            confirmedCasesOnDate: 1
-          */
-
           // Is the current date already stored? If so, increment the case count
           const processedDatesCount = confirmedCasesByDay.length;
           let dateAlreadyProcessed = false;
@@ -81,10 +103,31 @@ export default Vue.extend({
         for (let i = 0; i < processedDatesCount; i++) {
           this.$data.series[0].data.push(confirmedCasesByDay[i])
         }
-      }
 
       this.$data.isLoading = false;
+    }
+  },
+
+  mounted() {
+    this.$data.isLoading = true;
+
+    if (this.$data.series[0].data === null && store.getters['virusCasesFinland/confirmed'] !== null) {
+      this.fetchChartData();
+    }
+
+    this.$store.subscribe((mutation, state) => {
+      if (mutation.type === 'virusCasesFinland/DATA_FETCHED') {
+        this.fetchChartData();
+      }
     });
   },
 });
 </script>
+
+<style lang="sass" scoped>
+#progress-loader
+  display: block
+  width: 100px
+  margin: 0 auto
+  margin-top: 170px
+</style>
