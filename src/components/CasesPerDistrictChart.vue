@@ -65,6 +65,9 @@ export default Vue.extend({
             show: true,
             position: 'bottom',
           },
+          chart: {
+            width: '100%'
+          },
         },
       }],
       labels: []

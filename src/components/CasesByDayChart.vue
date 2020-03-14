@@ -53,7 +53,7 @@ export default Vue.extend({
       plotOptions: {
         bar: {
           horizontal: false,
-          columnWidth: '80%',
+          columnWidth: '100%',
         },
       },
       dataLabels: {
