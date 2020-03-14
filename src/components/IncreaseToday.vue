@@ -4,7 +4,7 @@
     max-height="160px"
     >
     <v-card-title>
-      Increase today
+      Infections change today
     </v-card-title>
 
     <v-progress-circular
@@ -96,7 +96,16 @@ export default Vue.extend({
       const casesYesterday = generatedDates[generatedDates.length - 3][1];
 
 
-      this.$data.increaseToday = casesToday - casesYesterday;
+      const total = casesToday - casesYesterday;
+
+      if (total > 0) {
+        this.$data.increaseToday = `+ ${casesToday - casesYesterday}`;
+      } else if (total > 0) {
+        this.$data.increaseToday = `- ${casesToday - casesYesterday}`;
+      } else {
+        this.$data.increaseToday = `${casesToday - casesYesterday}`;
+      }
+
       this.$data.isLoading = false;
     }
   },

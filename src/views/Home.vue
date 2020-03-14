@@ -24,6 +24,9 @@
         <v-col cols="12" sm="12" md="6">
           <CasesPerDistrictChart />
         </v-col>
+        <!-- <v-col cols="12" sm="12" md="6">
+          <CasesByDayChartLog />
+        </v-col> -->
       </v-row>
   </div>
 </template>
@@ -37,6 +40,7 @@ import IncreaseToday from "../components/IncreaseToday.vue";
 import CasesByDayChart from "../components/CasesByDayChart.vue";
 import CumulativeChart from "../components/CumulativeChart.vue";
 import CasesPerDistrictChart from "../components/CasesPerDistrictChart.vue";
+// import CasesByDayChartLog from "../components/CasesByDayChartLog.vue";
 
 export default {
   name: "Home",
@@ -49,6 +53,7 @@ export default {
     CasesByDayChart,
     CumulativeChart,
     CasesPerDistrictChart,
+    // CasesByDayChartLog,
   }
 };
 </script>
