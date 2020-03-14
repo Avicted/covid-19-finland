@@ -7,7 +7,7 @@
     <v-container style="margin-bottom: 75px;">
       <v-row>
         <v-col cols="12">
-          <p class="display-1">Finland COVID-19 statistics</p>
+          <p class="display-1">Finland COVID-19 data</p>
         </v-col>
       </v-row>
 
