@@ -5,7 +5,7 @@
           <CasesByDayChart />
         </v-col>
         <v-col cols="12" sm="12" md="6">
-          Right
+          <CumulativeChart />
         </v-col>
       </v-row>
   </div>
@@ -13,11 +13,13 @@
 
 <script>
 import CasesByDayChart from "../components/CasesByDayChart.vue";
+import CumulativeChart from "../components/CumulativeChart.vue";
 
 export default {
   name: "Home",
   components: {
-    CasesByDayChart
+    CasesByDayChart,
+    CumulativeChart
   }
 };
 </script>
