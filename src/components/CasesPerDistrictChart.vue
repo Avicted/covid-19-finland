@@ -58,6 +58,15 @@ export default Vue.extend({
         show: true,
         position: 'right',
       },
+      responsive: [{
+        breakpoint: 600,
+        options: {
+          legend: {
+            show: true,
+            position: 'bottom',
+          },
+        },
+      }],
       labels: []
     },
     series: [],
