@@ -25,9 +25,6 @@ const actions = {
         .then((response) => {
             commit("DATA_FETCHED", response);
         })
-        .catch((error) => {
-            console.log(error.statusText)
-        });
     }
 }
 

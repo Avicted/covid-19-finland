@@ -103,8 +103,6 @@ export default Vue.extend({
         series.push(count);
       }
 
-      console.log(casesPerHealthCareDistrict);
-
       this.$data.options.labels = lables;
       this.$data.series = series;
       this.$data.isLoading = false;
