@@ -63,6 +63,10 @@ export default Vue.extend({
         show: true,
         position: 'bottom',
       },
+      grid: {
+        borderColor: '#525252',
+        strokeDashArray: 7,
+      }
     },
     series: [{
       name: 'New infections',

@@ -1,7 +1,7 @@
 <template>
   <v-card 
-    min-height="175px"
-    max-height="175px"
+    min-height="160px"
+    max-height="160px"
     >
     <v-card-title>
       Increase today

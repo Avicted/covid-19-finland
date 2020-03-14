@@ -69,6 +69,10 @@ export default Vue.extend({
         colors: undefined,
         width: 2,
         dashArray: 0,      
+      },
+      grid: {
+        borderColor: '#525252',
+        strokeDashArray: 7,
       }
     },
     series: [{
