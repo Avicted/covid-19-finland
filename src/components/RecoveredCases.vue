@@ -4,18 +4,18 @@
     max-height="175px"
     >
     <v-card-title>
-      Confirmed cases
+      Recovered cases
     </v-card-title>
 
     <v-progress-circular
-      v-if="confirmedCases == null || isLoading == true" 
+      v-if="recoveredCases == null || isLoading == true" 
       id="progress-loader"
       :size="50"
       color="primary"
       indeterminate
     ></v-progress-circular>
     <v-card-text v-else>
-      <p class="display-3" style="text-align: center; color: #ce93d8;">{{ confirmedCases }}</p>
+      <p class="display-3" style="text-align: center; color: #a5d6a7;">{{ recoveredCases }}</p>
     </v-card-text>
   </v-card>
 </template>
@@ -25,18 +25,18 @@ import Vue from "vue";
 import store from "../store";
 
 export default Vue.extend({
-  name: "ConfirmedCases",
+  name: "recoveredCases",
 
   data: () => ({
     isLoading: true,
-    confirmedCases: null,
+    recoveredCases: null,
   }),
 
   methods: {
-    fetchConfirmedCases() {
-      const confirmedCases = store.getters['virusCasesFinland/confirmed'];
-      const confirmedCasesCount = confirmedCases.length;
-      this.$data.confirmedCases = confirmedCasesCount;
+    fetchRecoveredCases() {
+      const recoveredCases = store.getters['virusCasesFinland/recovered'];
+      const recoveredCasesCount = recoveredCases.length;
+      this.$data.recoveredCases = recoveredCasesCount;
       this.$data.isLoading = false;
     }
   },
@@ -44,13 +44,13 @@ export default Vue.extend({
   mounted() {
     this.$data.isLoading = true;
 
-    if (this.$data.confirmedCases === null && store.getters['virusCasesFinland/confirmed'] !== null) {
-      this.fetchConfirmedCases();
+    if (this.$data.recoveredCases === null && store.getters['virusCasesFinland/recovered'] !== null) {
+      this.fetchRecoveredCases();
     }
     
     this.$store.subscribe((mutation, state) => {
       if (mutation.type === 'virusCasesFinland/DATA_FETCHED') {
-        this.fetchConfirmedCases();
+        this.fetchRecoveredCases();
       }
     });
   },
