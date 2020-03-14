@@ -1,14 +1,14 @@
 <template>
   <v-card 
-    min-height="400px"
-    max-height="400px"
+    min-height="500px"
+    max-height="500px"
     >
     <v-card-title>
       Infections by health care district
     </v-card-title>
 
     <v-progress-circular
-      v-if="series[0].data == null || isLoading == true" 
+      v-if="isLoading == true" 
       id="progress-loader"
       :size="50"
       color="primary"
@@ -36,167 +36,73 @@ export default Vue.extend({
   data: () => ({
     isLoading: true,
     options: {
-      colors: ['#ec407a', '#4caf50'],
+      // colors: ['#ec407a', '#4caf50'],
       chart: {
         stacked: false,
-        type: 'bar',
+        type: 'donut',
         toolbar: {
           show: false,
         },
       },
-      xaxis: {
-        type: 'datetime',
-      },
       plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: '80%',
-        },
+
       },
       dataLabels: {
         enabled: false
       },
       legend: {
         show: true,
-        position: 'bottom',
+        position: 'right',
       },
+      labels: []
     },
-    series: [{
-      name: 'New infections',
-      data: []
-    },
-    {
-      name: 'Recovered',
-      data: []
-    }]
+    series: [],
   }),
 
   methods: {
-    fetchChartDataConfirmed() {
+    fetchCasesPerHealthCareDistrict() {
+      const casesPerHealthCareDistrict: string|any[] = [];
+
       const confirmedCases = store.getters['virusCasesFinland/confirmed'];
       const confirmedCasesCount = confirmedCases.length;
-      const confirmedCasesByDay: string|any[] = [];
-      
-      const generatedDates = [];
-      const todaysDate = new Date().toISOString();
-      let oldestDate = new Date().toISOString();
 
       for (let i = 0; i < confirmedCasesCount; i++) {
-        const datetime = confirmedCases[i].date;
-        const date = new Date(datetime).toISOString().substr(0, 10);
-        const milliseconds = new Date(date).getTime(); 
+        let found = false;
 
-        if (Date.parse(datetime) < Date.parse(oldestDate)) {
-          oldestDate = datetime;
-        }
-
-        // Is the current date already stored? If so, increment the case count
-        const processedDatesCount = confirmedCasesByDay.length;
-        let dateAlreadyProcessed = false;
-
-        for (let i = 0; i < processedDatesCount; i++) {
-          const currentMilliseconds = confirmedCasesByDay[i][0];
-
-          if (currentMilliseconds === milliseconds) {
-            confirmedCasesByDay[i][1] = confirmedCasesByDay[i][1] + 1;
-            dateAlreadyProcessed = true;
+        for (let j = 0; j < casesPerHealthCareDistrict.length; j++) {
+          if (confirmedCases[i].healthCareDistrict === casesPerHealthCareDistrict[j].healthCareDistrict) {
+            found = true;
+            casesPerHealthCareDistrict[j].count = casesPerHealthCareDistrict[j].count + 1;
             break;
           }
         }
 
-        // If not store it
-        if (!dateAlreadyProcessed) {
-          confirmedCasesByDay.push([milliseconds, 1]);
+        if (!found) {
+          casesPerHealthCareDistrict.push({
+            healthCareDistrict: confirmedCases[i].healthCareDistrict,
+            count: 1
+          });
         }
       }
 
-      // Generate missing dates
-      const today = moment(todaysDate);
-      const oldest = moment(oldestDate);
 
-      for (let m = moment(oldest); m.diff(today, 'days') <= 0; m.add(1, 'days')) {
-        const currentMilliseconds = new Date(m.format('YYYY-MM-DD')).getTime();
-        generatedDates.push([currentMilliseconds, 0]);
+      // Add the count to the name of the healthCareDistrict
+      const lables: string[] = [];
+      const series: number[] = [];
+
+      for (let i = 0; i < casesPerHealthCareDistrict.length; i++) {
+        const healthCareDistrict = casesPerHealthCareDistrict[i].healthCareDistrict;
+        const count = casesPerHealthCareDistrict[i].count;
+
+        casesPerHealthCareDistrict[i].healthCareDistrict = `${healthCareDistrict} (${count})`;
+        lables.push(casesPerHealthCareDistrict[i].healthCareDistrict);
+        series.push(count);
       }
 
-      // Assign the data to the generated dates
-      for (let i = 0; i < generatedDates.length; i++) {
-        for (let j = 0; j < confirmedCasesByDay.length; j++) {
-          const currentCaseDate = confirmedCasesByDay[j][0];
-          if (currentCaseDate === generatedDates[i][0]) {
-            generatedDates[i][1] = generatedDates[i][1] + confirmedCasesByDay[j][1];
-          }
-        }
-      }
+      console.log(casesPerHealthCareDistrict);
 
-      for (let i = 0; i < generatedDates.length; i++) {
-        this.$data.series[0].data.push(generatedDates[i])
-      }
-
-      this.$data.isLoading = false;
-    },
-
-    fetchChartDataRecovered() {
-      const recoveredCases = store.getters['virusCasesFinland/recovered'];
-      const recoveredCasesCount = recoveredCases.length;
-      const recoveredCasesByDay: string|any[] = [];
-      
-      const generatedDates = [];
-      const todaysDate = new Date().toISOString();
-      let oldestDate = new Date().toISOString();
-
-      for (let i = 0; i < recoveredCasesCount; i++) {
-        const datetime = recoveredCases[i].date;
-        const date = new Date(datetime).toISOString().substr(0, 10);
-        const milliseconds = new Date(date).getTime(); 
-
-        if (Date.parse(datetime) < Date.parse(oldestDate)) {
-          oldestDate = datetime;
-        }
-
-        // Is the current date already stored? If so, increment the case count
-        const processedDatesCount = recoveredCasesByDay.length;
-        let dateAlreadyProcessed = false;
-
-        for (let i = 0; i < processedDatesCount; i++) {
-          const currentMilliseconds = recoveredCasesByDay[i][0];
-
-          if (currentMilliseconds === milliseconds) {
-            recoveredCasesByDay[i][1] = recoveredCasesByDay[i][1] + 1;
-            dateAlreadyProcessed = true;
-            break;
-          }
-        }
-
-        // If not store it
-        if (!dateAlreadyProcessed) {
-          recoveredCasesByDay.push([milliseconds, 1]);
-        }
-      }
-
-      // Generate missing dates
-      const today = moment(todaysDate);
-      const oldest = moment(oldestDate);
-
-      for (let m = moment(oldest); m.diff(today, 'days') <= 0; m.add(1, 'days')) {
-        const currentMilliseconds = new Date(m.format('YYYY-MM-DD')).getTime();
-        generatedDates.push([currentMilliseconds, 0]);
-      }
-
-      // Assign the data to the generated dates
-      for (let i = 0; i < generatedDates.length; i++) {
-        for (let j = 0; j < recoveredCasesByDay.length; j++) {
-          const currentCaseDate = recoveredCasesByDay[j][0];
-          if (currentCaseDate === generatedDates[i][0]) {
-            generatedDates[i][1] = generatedDates[i][1] + recoveredCasesByDay[j][1];
-          }
-        }
-      }
-
-      for (let i = 0; i < generatedDates.length; i++) {
-        this.$data.series[1].data.push(generatedDates[i])
-      }
-
+      this.$data.options.labels = lables;
+      this.$data.series = series;
       this.$data.isLoading = false;
     }
   },
@@ -204,17 +110,13 @@ export default Vue.extend({
   mounted() {
     this.$data.isLoading = true;
 
-    if (this.$data.series[0].data === null && store.getters['virusCasesFinland/confirmed'] !== null) {
-      this.fetchChartDataConfirmed();
-    }
-    if (this.$data.series[0].data === null && store.getters['virusCasesFinland/recovered'] !== null) {
-      this.fetchChartDataRecovered();
+    if (this.$data.series === null && store.getters['virusCasesFinland/confirmed'] !== null) {
+      this.fetchCasesPerHealthCareDistrict();
     }
 
     this.$store.subscribe((mutation, state) => {
       if (mutation.type === 'virusCasesFinland/DATA_FETCHED') {
-        this.fetchChartDataConfirmed();
-        this.fetchChartDataRecovered();
+        this.fetchCasesPerHealthCareDistrict();
       }
     });
   },

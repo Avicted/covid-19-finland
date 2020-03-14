@@ -130,9 +130,6 @@ export default Vue.extend({
         generatedDates.push([currentMilliseconds, 0]);
       }
 
-    
-      console.log(generatedDates);
-
       // Assign the data to the generated dates
       for (let i = 0; i < generatedDates.length; i++) {
         let caseFoundOnDate = false;
