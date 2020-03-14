@@ -36,6 +36,9 @@ export default Vue.extend({
   data: () => ({
     isLoading: true,
     options: {
+      theme: {
+        mode: 'dark', 
+      },
       colors: ['#ce93d8', '#81c784', '#e57373'],
       chart: {
         stacked: false,
