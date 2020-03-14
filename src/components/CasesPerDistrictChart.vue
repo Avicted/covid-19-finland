@@ -37,7 +37,8 @@ export default Vue.extend({
     isLoading: true,
     options: {
       theme: {
-        mode: 'dark', 
+        mode: 'dark',
+        palette: 'palette7' // upto palette10
       },
       // colors: ['#ec407a', '#4caf50'],
       chart: {
@@ -131,5 +132,5 @@ export default Vue.extend({
   display: block
   width: 100px
   margin: 0 auto
-  margin-top: 120px
+  margin-top: 160px
 </style>
