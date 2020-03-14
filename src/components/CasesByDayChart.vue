@@ -44,7 +44,16 @@ export default Vue.extend({
         stacked: false,
         type: 'bar',
         toolbar: {
-          show: false,
+          show: true,
+          tools: {
+            download: false,
+            selection: true,
+            zoom: true,
+            zoomin: true,
+            zoomout: true,
+            pan: true,
+            reset: true,
+          },
         },
       },
       xaxis: {
