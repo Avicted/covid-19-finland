@@ -1,7 +1,7 @@
 <template>
   <v-card 
-    min-height="500px"
-    max-height="500px"
+    min-height="400px"
+    max-height="400px"
     >
     <v-card-title>
       Reported infections / Recovered by day (Cumulative)
@@ -36,7 +36,7 @@ export default Vue.extend({
   data: () => ({
     isLoading: true,
     options: {
-      colors: ['#ec407a', '#4caf50'],
+      colors: ['#ce93d8', '#81c784', '#e57373'],
       chart: {
         stacked: false,
         type: 'area',
@@ -74,6 +74,10 @@ export default Vue.extend({
     },
     {
       name: 'Recovered (cumulative)',
+      data: []
+    },
+    {
+      name: 'Deaths (cumulative)',
       data: []
     }]
   }),
@@ -228,6 +232,80 @@ export default Vue.extend({
       for (let i = 0; i < generatedDates.length; i++) {
         this.$data.series[1].data.push(generatedDates[i])
       }
+    },
+    
+    fetchChartDataDeaths() {
+      const deathCases = store.getters['virusCasesFinland/deaths'];
+      const deathCasesCount = deathCases.length;
+      const deathCasesByDay: string|any[] = [];
+      
+      const generatedDates = [];
+      const todaysDate = new Date().toISOString();
+      let oldestDate = new Date().toISOString();
+
+      for (let i = 0; i < deathCasesCount; i++) {
+        const datetime = deathCases[i].date;
+        const date = new Date(datetime).toISOString().substr(0, 10);
+        const milliseconds = new Date(date).getTime(); 
+
+        if (Date.parse(datetime) < Date.parse(oldestDate)) {
+          oldestDate = datetime;
+        }
+
+        // Is the current date already stored? If so, increment the case count
+        const processedDatesCount = deathCasesByDay.length;
+        let dateAlreadyProcessed = false;
+
+        for (let i = 0; i < processedDatesCount; i++) {
+          const currentMilliseconds = deathCasesByDay[i][0];
+
+          if (currentMilliseconds === milliseconds) {
+            deathCasesByDay[i][1] = deathCasesByDay[i][1] + 1;
+            dateAlreadyProcessed = true;
+            break;
+          }
+        }
+
+        // If not store it
+        if (!dateAlreadyProcessed) {
+          deathCasesByDay.push([milliseconds, 1]);
+        }
+      }
+
+      // Generate missing dates
+      const today = moment(todaysDate);
+      const oldest = moment(oldestDate);
+
+      for (let m = moment(oldest); m.diff(today, 'days') <= 0; m.add(1, 'days')) {
+        const currentMilliseconds = new Date(m.format('YYYY-MM-DD')).getTime();
+        generatedDates.push([currentMilliseconds, 0]);
+      }
+
+      // Assign the data to the generated dates
+      for (let i = 0; i < generatedDates.length; i++) {
+        let caseFoundOnDate = false;
+
+        for (let j = 0; j < deathCasesByDay.length; j++) {
+          if (deathCasesByDay[j][0] === generatedDates[i][0]) {
+            caseFoundOnDate = true;
+
+            if (i > 0) {
+              generatedDates[i][1] = generatedDates[i][1] + generatedDates[i - 1][1] + deathCasesByDay[j][1];
+            }
+            else {
+              generatedDates[i][1] = generatedDates[i][1] + deathCasesByDay[j][1];
+            }
+          }
+        }
+
+        if (i > 0 && !caseFoundOnDate) {
+          generatedDates[i][1] = generatedDates[i][1] + generatedDates[i - 1][1];
+        }
+      }
+
+      for (let i = 0; i < generatedDates.length; i++) {
+        this.$data.series[2].data.push(generatedDates[i])
+      }
 
       this.$data.isLoading = false;
     }
@@ -239,14 +317,18 @@ export default Vue.extend({
     if (this.$data.series[0].data === null && store.getters['virusCasesFinland/confirmed'] !== null) {
       this.fetchChartDataConfirmed();
     }
-    if (this.$data.series[0].data === null && store.getters['virusCasesFinland/recovered'] !== null) {
+    if (this.$data.series[1].data === null && store.getters['virusCasesFinland/recovered'] !== null) {
       this.fetchChartDataRecovered();
+    }
+    if (this.$data.series[2].data === null && store.getters['virusCasesFinland/deaths'] !== null) {
+      this.fetchChartDataDeaths();
     }
 
     this.$store.subscribe((mutation, state) => {
       if (mutation.type === 'virusCasesFinland/DATA_FETCHED') {
         this.fetchChartDataConfirmed();
         this.fetchChartDataRecovered();
+        this.fetchChartDataDeaths();
       }
     });
   },
@@ -258,5 +340,5 @@ export default Vue.extend({
   display: block
   width: 100px
   margin: 0 auto
-  margin-top: 170px
+  margin-top: 120px
 </style>
