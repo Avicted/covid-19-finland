@@ -1,6 +1,11 @@
 # covid-19-finland
 
+## Description
+Vue web app that displays data about COVID-19 cases in Finland.
+
 ## Project setup
+Created with vue-cli (vue ui)
+
 ```
 npm install
 ```
@@ -20,5 +25,6 @@ npm run build
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Data source
+https://github.com/HS-Datadesk/koronavirus-avoindata
+
