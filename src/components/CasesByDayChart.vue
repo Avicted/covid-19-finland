@@ -4,7 +4,7 @@
     max-height="400px"
     >
     <v-card-title>
-      Reported infections / Recovered by day
+      Infections, recovered and death cases by day
     </v-card-title>
 
     <v-progress-circular
