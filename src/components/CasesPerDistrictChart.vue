@@ -66,9 +66,6 @@ export default Vue.extend({
           show: false,
         },
       },
-      plotOptions: {
-
-      },
       dataLabels: {
         enabled: false
       },
@@ -88,6 +85,9 @@ export default Vue.extend({
           },
         },
       }],
+      tooltip: {
+        fillSeriesColor: false,
+      },
       labels: []
     },
     series: [],
