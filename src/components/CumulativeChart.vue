@@ -16,6 +16,8 @@
           <v-btn
             icon
             v-on="on"
+            outlined 
+            color="primary"
           >
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
