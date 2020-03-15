@@ -97,15 +97,30 @@ export default Vue.extend({
       },
       xaxis: {
         type: 'datetime',
+        crosshairs: {
+          show: true,
+          width: 1,
+          position: 'back',
+          opacity: 0.9,        
+          stroke: {
+            color: '#b6b6b6',
+            width: 1,
+            dashArray: 3,
+          },
+        }
       },
       plotOptions: {
         bar: {
           horizontal: false,
-          columnWidth: '80%',
+          columnWidth: '90%',
         },
       },
       dataLabels: {
         enabled: false
+      },
+      tooltip: {
+        shared: true,
+        followCursor: true,
       },
       legend: {
         show: true,
@@ -217,6 +232,9 @@ export default Vue.extend({
     },
 
     fetchChartDataRecovered() {
+      const confirmedCases = store.getters['virusCasesFinland/confirmed'];
+      const confirmedCasesCount = confirmedCases.length;
+
       const recoveredCases = store.getters['virusCasesFinland/recovered'];
       const recoveredCasesCount = recoveredCases.length;
       const recoveredCasesByDay: string|any[] = [];
@@ -225,14 +243,20 @@ export default Vue.extend({
       const todaysDate = new Date().toISOString();
       let oldestDate = new Date().toISOString();
 
-      for (let i = 0; i < recoveredCasesCount; i++) {
-        const datetime = recoveredCases[i].date;
+      for (let i = 0; i < confirmedCasesCount; i++) {
+        const datetime = confirmedCases[i].date;
         const date = new Date(datetime).toISOString().substr(0, 10);
         const milliseconds = new Date(date).getTime(); 
 
         if (Date.parse(datetime) < Date.parse(oldestDate)) {
           oldestDate = datetime;
         }
+      }
+
+      for (let i = 0; i < recoveredCasesCount; i++) {
+        const datetime = recoveredCases[i].date;
+        const date = new Date(datetime).toISOString().substr(0, 10);
+        const milliseconds = new Date(date).getTime(); 
 
         // Is the current date already stored? If so, increment the case count
         const processedDatesCount = recoveredCasesByDay.length;
@@ -291,6 +315,9 @@ export default Vue.extend({
     },
     
     fetchChartDataDeaths() {
+      const confirmedCases = store.getters['virusCasesFinland/confirmed'];
+      const confirmedCasesCount = confirmedCases.length;
+
       const deathCases = store.getters['virusCasesFinland/deaths'];
       const deathCasesCount = deathCases.length;
       const deathCasesByDay: string|any[] = [];
@@ -298,15 +325,21 @@ export default Vue.extend({
       const generatedDates = [];
       const todaysDate = new Date().toISOString();
       let oldestDate = new Date().toISOString();
-
-      for (let i = 0; i < deathCasesCount; i++) {
-        const datetime = deathCases[i].date;
+      
+      for (let i = 0; i < confirmedCasesCount; i++) {
+        const datetime = confirmedCases[i].date;
         const date = new Date(datetime).toISOString().substr(0, 10);
         const milliseconds = new Date(date).getTime(); 
 
         if (Date.parse(datetime) < Date.parse(oldestDate)) {
           oldestDate = datetime;
         }
+      }
+
+      for (let i = 0; i < deathCasesCount; i++) {
+        const datetime = deathCases[i].date;
+        const date = new Date(datetime).toISOString().substr(0, 10);
+        const milliseconds = new Date(date).getTime(); 
 
         // Is the current date already stored? If so, increment the case count
         const processedDatesCount = deathCasesByDay.length;
