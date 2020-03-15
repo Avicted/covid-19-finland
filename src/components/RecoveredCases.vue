@@ -1,9 +1,9 @@
 <template>
   <v-card 
-    min-height="160px"
-    max-height="160px"
+    min-height="150px"
+    max-height="150px"
     >
-    <v-card-title>
+    <v-card-title class="pb-2">
       Recovered cases
     </v-card-title>
 
