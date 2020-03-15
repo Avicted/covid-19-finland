@@ -61,9 +61,6 @@ import store from "../store";
 import VueApexCharts from 'vue-apexcharts';
 import moment from "moment";
 
-// @TODO: the x-axis shows one day too much at the end
-
-
 export default Vue.extend({
   name: "CasesByDayChart",
 
@@ -188,7 +185,7 @@ export default Vue.extend({
       const today = moment(todaysDate);
       const oldest = moment(oldestDate);
 
-      for (let m = moment(oldest); m.diff(today, 'days') <= 0; m.add(1, 'days')) {
+      for (let m = moment(oldest); m.isBefore(today); m.add(1, 'days')) {
         const currentMilliseconds = new Date(m.format('YYYY-MM-DD')).getTime();
         generatedDates.push([currentMilliseconds, 0]);
       }
@@ -252,7 +249,7 @@ export default Vue.extend({
       const today = moment(todaysDate);
       const oldest = moment(oldestDate);
 
-      for (let m = moment(oldest); m.diff(today, 'days') <= 0; m.add(1, 'days')) {
+      for (let m = moment(oldest); m.isBefore(today); m.add(1, 'days')) {
         const currentMilliseconds = new Date(m.format('YYYY-MM-DD')).getTime();
         generatedDates.push([currentMilliseconds, 0]);
       }
@@ -316,7 +313,7 @@ export default Vue.extend({
       const today = moment(todaysDate);
       const oldest = moment(oldestDate);
 
-      for (let m = moment(oldest); m.diff(today, 'days') <= 0; m.add(1, 'days')) {
+      for (let m = moment(oldest); m.isBefore(today); m.add(1, 'days')) {
         const currentMilliseconds = new Date(m.format('YYYY-MM-DD')).getTime();
         generatedDates.push([currentMilliseconds, 0]);
       }
@@ -361,8 +358,6 @@ export default Vue.extend({
     });
   },
 });
-
-// @TODO: fix the v-select responsiveness
 </script>
 
 <style lang="sass" scoped>
