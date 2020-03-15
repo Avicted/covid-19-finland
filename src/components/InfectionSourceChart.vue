@@ -102,6 +102,9 @@ export default Vue.extend({
 
       for (let i = 0; i < confirmedCasesCount; i++) {
         let found = false;
+        if (confirmedCases[i].infectionSourceCountry === "null" || confirmedCases[i].infectionSourceCountry === null || confirmedCases[i].infectionSourceCountry === "") {
+          confirmedCases[i].infectionSourceCountry = "Unknown";
+        }
 
         for (let j = 0; j < casesPerSourceCountry.length; j++) {
           if (confirmedCases[i].infectionSourceCountry === casesPerSourceCountry[j].infectionSourceCountry) {
