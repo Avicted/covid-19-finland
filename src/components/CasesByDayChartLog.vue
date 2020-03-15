@@ -60,7 +60,7 @@ export default Vue.extend({
         type: 'datetime',
       },
       yaxis: {
-        logarithmic: false,
+        logarithmic: true,
       },
       dataLabels: {
         enabled: false

@@ -2,6 +2,7 @@
 
 ## Description
 Vue web app that displays data about COVID-19 cases in Finland.
+Live example: https://avicted.github.io/covid-19-finland
 
 ## Project setup
 Created with vue-cli (vue ui)

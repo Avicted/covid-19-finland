@@ -5,6 +5,16 @@
     >
     <v-card-title>
       Infections, recovered and death cases by day
+      <v-select
+        v-if="series[0].data !== null || !isLoading"
+        v-model="selectedChartStyle"
+        :items="chartStyles"
+        @input="updateChartType()"
+        label="Chart type"
+        dense
+        outlined
+        style="max-width: 100px;"
+      ></v-select>
     </v-card-title>
 
     <v-progress-circular
@@ -14,10 +24,13 @@
       color="primary"
       indeterminate
     ></v-progress-circular>
-    <apexchart 
+
+    <apexchart
       v-else
+      ref="chart"
       width="100%"
       height="75%"
+      :type="type"
       :options="options" 
       :series="series">
     </apexchart>
@@ -33,8 +46,18 @@ import moment from "moment";
 export default Vue.extend({
   name: "CasesByDayChart",
 
+  components: {
+    apexchart: VueApexCharts
+  },
+
   data: () => ({
     isLoading: true,
+    type: 'bar',
+    chartStyles: [
+      'line',
+      'bar'
+    ],
+    selectedChartStyle: 'bar',
     options: {
       theme: {
         mode: 'dark', 
@@ -42,7 +65,6 @@ export default Vue.extend({
       colors: ['#ce93d8', '#81c784', '#e57373'],
       chart: {
         stacked: false,
-        type: 'bar',
         toolbar: {
           show: true,
           tools: {
@@ -64,6 +86,13 @@ export default Vue.extend({
           horizontal: false,
           columnWidth: '100%',
         },
+      },
+      stroke: {
+        show: true,
+        curve: 'straight',
+        colors: undefined,
+        width: 2,
+        dashArray: 0,      
       },
       dataLabels: {
         enabled: false
@@ -92,6 +121,10 @@ export default Vue.extend({
   }),
 
   methods: {
+    updateChartType() {
+      this.$data.type = this.$data.selectedChartStyle;
+    },
+
     fetchChartDataConfirmed() {
       const confirmedCases = store.getters['virusCasesFinland/confirmed'];
       const confirmedCasesCount = confirmedCases.length;

@@ -40,6 +40,8 @@ import IncreaseToday from "../components/IncreaseToday.vue";
 import CasesByDayChart from "../components/CasesByDayChart.vue";
 import CumulativeChart from "../components/CumulativeChart.vue";
 import CasesPerDistrictChart from "../components/CasesPerDistrictChart.vue";
+
+// @Note: logarithmic: true is broken in ApexCharts at the moment
 // import CasesByDayChartLog from "../components/CasesByDayChartLog.vue";
 
 export default {
