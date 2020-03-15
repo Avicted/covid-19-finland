@@ -5,6 +5,35 @@
     >
     <v-card-title>
       Cases by day (cumulative)
+
+      <v-spacer></v-spacer>
+
+      <v-menu 
+        v-if="series[0].data !== null || !isLoading"
+        bottom 
+        left>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            icon
+            v-on="on"
+          >
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list>
+          <v-list-item
+            v-for="(item, i) in chartStyles"
+            :key="i"
+            @click="updateChartType(item)"
+            dense
+            color="primary"
+            :class='[item === type ? "v-list-item--active" : ""]'
+          >
+            <v-list-item-title>{{ item }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-card-title>
 
     <v-progress-circular
@@ -14,12 +43,15 @@
       color="primary"
       indeterminate
     ></v-progress-circular>
+
     <apexchart 
       v-else
       width="100%"
       height="75%"
+      :type="type"
       :options="options" 
       :series="series">
+
     </apexchart>
   </v-card>
 </template>
@@ -37,6 +69,12 @@ export default Vue.extend({
 
   data: () => ({
     isLoading: true,
+    type: 'area',
+    chartStyles: [
+      'bar',
+      'line',
+      'area'
+    ],
     options: {
       theme: {
         mode: 'dark', 
@@ -44,7 +82,6 @@ export default Vue.extend({
       colors: ['#ce93d8', '#81c784', '#e57373'],
       chart: {
         stacked: false,
-        type: 'area',
         toolbar: {
           show: true,
           tools: {
@@ -101,6 +138,10 @@ export default Vue.extend({
   }),
 
   methods: {
+    updateChartType(newChartStyle: string) {
+      this.$data.type = newChartStyle;
+    },
+
     fetchChartDataConfirmed() {
       const confirmedCases = store.getters['virusCasesFinland/confirmed'];
       const confirmedCasesCount = confirmedCases.length;
