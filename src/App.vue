@@ -7,7 +7,7 @@
     <v-container style="margin-bottom: 75px;">
       <v-row>
         <v-col cols="12">
-          <p class="display-1">Finland COVID-19 data</p>
+          <p class="display-1 mb-0" style="font-family: monospace !important;">Finland COVID-19 data</p>
         </v-col>
       </v-row>
 
@@ -16,12 +16,12 @@
       </v-content>
     </v-container>
 
-    <v-footer absolute class="font-weight-light" style="background: transparent;">
+    <v-footer absolute class="font-weight-light" style="background: transparent; font-family: monospace;">
       <v-col
         class="text-center"
         cols="12"
       >
-        {{ new Date().getFullYear() }} - <strong><a href="https://github.com/Avicted">Avicted</a></strong>
+        {{ new Date().getFullYear() }} - <strong><a href="https://github.com/Avicted" class="pink--text" style="text-decoration: none;">Avicted</a></strong>
       </v-col>
     </v-footer>
   </v-app>

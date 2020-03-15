@@ -1,16 +1,16 @@
 <template>
   <div class="home">
     <v-row>
-      <v-col cols="12" sm="12" md="6" lg="3">
+      <v-col cols="12" sm="12" md="6" xl="3">
         <ConfirmedCases />
       </v-col>
-      <v-col cols="12" sm="12" md="6" lg="3">
+      <v-col cols="12" sm="12" md="6" xl="3">
         <RecoveredCases />
       </v-col>
-      <v-col cols="12" sm="12" md="6" lg="3">
+      <v-col cols="12" sm="12" md="6" xl="3">
         <DeathCases />
       </v-col>
-      <v-col cols="12" sm="12" md="6" lg="3">
+      <v-col cols="12" sm="12" md="6" xl="3">
         <IncreaseToday />
       </v-col>
     </v-row>
