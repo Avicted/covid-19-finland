@@ -1,16 +1,16 @@
 <template>
   <div class="home">
     <v-row>
-      <v-col cols="12" sm="12" md="3">
+      <v-col cols="12" sm="12" md="6" lg="3">
         <ConfirmedCases />
       </v-col>
-      <v-col cols="12" sm="12" md="3">
+      <v-col cols="12" sm="12" md="6" lg="3">
         <RecoveredCases />
       </v-col>
-      <v-col cols="12" sm="12" md="3">
+      <v-col cols="12" sm="12" md="6" lg="3">
         <DeathCases />
       </v-col>
-      <v-col cols="12" sm="12" md="3">
+      <v-col cols="12" sm="12" md="6" lg="3">
         <IncreaseToday />
       </v-col>
     </v-row>
@@ -64,4 +64,7 @@ export default {
 .apexcharts-canvas
   &.apexcharts-theme-dark
     background: transparent !important
+
+.menuable__content__active
+  z-index: 1000 !important
 </style>

@@ -4,7 +4,7 @@
     max-height="400px"
     >
     <v-card-title>
-      Infections, recovered and death cases (cumulative)
+      Cases by day (cumulative)
     </v-card-title>
 
     <v-progress-circular
@@ -29,6 +29,8 @@ import Vue from "vue";
 import store from "../store";
 import VueApexCharts from 'vue-apexcharts';
 import moment from "moment";
+
+// @TODO: the x-axis shows one day too much at the end
 
 export default Vue.extend({
   name: "CumulativeChart",

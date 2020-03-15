@@ -1,20 +1,38 @@
 <template>
   <v-card 
-    min-height="400px"
-    max-height="400px"
+    id="card"
     >
     <v-card-title>
-      Infections, recovered and death cases by day
-      <v-select
+      Cases by day
+      
+      <v-spacer></v-spacer>
+
+      <v-menu 
         v-if="series[0].data !== null || !isLoading"
-        v-model="selectedChartStyle"
-        :items="chartStyles"
-        @input="updateChartType()"
-        label="Chart type"
-        dense
-        outlined
-        style="max-width: 100px;"
-      ></v-select>
+        bottom 
+        left>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            icon
+            v-on="on"
+          >
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list>
+          <v-list-item
+            v-for="(item, i) in chartStyles"
+            :key="i"
+            @click="updateChartType(item)"
+            dense
+            color="primary"
+            :class='[item === type ? "v-list-item--active" : ""]'
+          >
+            <v-list-item-title>{{ item }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-card-title>
 
     <v-progress-circular
@@ -43,6 +61,9 @@ import store from "../store";
 import VueApexCharts from 'vue-apexcharts';
 import moment from "moment";
 
+// @TODO: the x-axis shows one day too much at the end
+
+
 export default Vue.extend({
   name: "CasesByDayChart",
 
@@ -54,10 +75,10 @@ export default Vue.extend({
     isLoading: true,
     type: 'bar',
     chartStyles: [
+      'bar',
       'line',
-      'bar'
+      'area'
     ],
-    selectedChartStyle: 'bar',
     options: {
       theme: {
         mode: 'dark', 
@@ -121,8 +142,8 @@ export default Vue.extend({
   }),
 
   methods: {
-    updateChartType() {
-      this.$data.type = this.$data.selectedChartStyle;
+    updateChartType(newChartStyle: string) {
+      this.$data.type = newChartStyle;
     },
 
     fetchChartDataConfirmed() {
@@ -340,6 +361,8 @@ export default Vue.extend({
     });
   },
 });
+
+// @TODO: fix the v-select responsiveness
 </script>
 
 <style lang="sass" scoped>
@@ -348,4 +371,13 @@ export default Vue.extend({
   width: 100px
   margin: 0 auto
   margin-top: 120px
+
+#card
+  min-height: 400px
+  max-height: 400px
+
+@media (max-width: 439px)
+  #card
+    min-height: 600px
+    max-height: 600px
 </style>
