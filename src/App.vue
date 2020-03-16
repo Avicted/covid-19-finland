@@ -28,8 +28,12 @@
           <a href="https://github.com/Avicted/covid-19-finland">Source code</a>
         </p>
         <p class="mb-0">
-          <a href="https://github.com/HS-Datadesk/koronavirus-avoindata">Data source</a>
-          © 2020 Helsingin Sanomat
+          <a href="https://github.com/HS-Datadesk/koronavirus-avoindata">Finland data source</a>
+          | Helsingin Sanomat
+        </p>
+        <p class="mb-0">
+          <a href="https://ourworldindata.org/coronavirus-source-data">Global data source</a>
+          | World Health Organization (WHO)
         </p>
         <p class="mb-0">
           Developed by:
