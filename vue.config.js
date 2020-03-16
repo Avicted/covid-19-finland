@@ -1,4 +1,4 @@
 module.exports = {
   transpileDependencies: ["vuetify"],
-  publicPath: '/covid-19-finland/'
+  publicPath: "/covid-19-finland/"
 };

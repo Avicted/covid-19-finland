@@ -1,5 +1,6 @@
 <template>
-  <v-card 
+  <v-card
+    id="card"
     min-height="500px"
     max-height="500px"
     >
@@ -61,36 +62,43 @@ export default Vue.extend({
       ],
       chart: {
         stacked: false,
-        type: 'donut',
+        type: "donut",
         toolbar: {
-          show: false,
-        },
+          show: false
+        }
       },
       dataLabels: {
         enabled: false
       },
       legend: {
         show: true,
-        position: 'right',
+        position: "right"
       },
-      responsive: [{
-        breakpoint: 600,
-        options: {
-          legend: {
-            show: true,
-            position: 'bottom',
-          },
-          chart: {
-            width: '100%'
-          },
-        },
-      }],
+      responsive: [
+        {
+          breakpoint: 1400,
+          options: {
+            legend: {
+              show: true,
+              position: "bottom",
+              itemMargin: {
+                horizontal: 3,
+                vertical: 3
+              }
+            },
+            chart: {
+              width: "100%",
+              height: "90%"
+            }
+          }
+        }
+      ],
       tooltip: {
-        fillSeriesColor: false,
+        fillSeriesColor: false
       },
       labels: []
     },
-    series: [],
+    series: []
   }),
 
   methods: {
@@ -161,4 +169,10 @@ export default Vue.extend({
   width: 100px
   margin: 0 auto
   margin-top: 160px
+
+
+@media (max-width: 1400px)
+  #card
+    min-height: 700px
+    max-height: 700px
 </style>
