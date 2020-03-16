@@ -50,7 +50,6 @@
 <script lang="ts">
 import Vue from "vue";
 import store from "../store";
-import moment from "moment";
 
 export default Vue.extend({
   name: "GlobalCumulativeChart",
@@ -63,7 +62,7 @@ export default Vue.extend({
       theme: {
         mode: "dark"
       },
-      colors: ["#ce93d8", "#81c784", "#e57373"],
+      colors: ["#ce93d8", "#e57373"],
       chart: {
         stacked: false,
         toolbar: {
@@ -146,6 +145,10 @@ export default Vue.extend({
       {
         name: "Infections World (cumulative)",
         data: []
+      },
+      {
+        name: "Deaths World (cumulative)",
+        data: []
       }
     ]
   }),
@@ -160,7 +163,9 @@ export default Vue.extend({
         const confirmedCases = store.getters["virusCasesGlobal/data"];
         const confirmedCasesCount = confirmedCases.length;
 
-        const worldCases = [];
+        const worldCasesTotal = [];
+        const worldCasesDeaths = [];
+
         for (let i = 0; i < confirmedCasesCount; i++) {
           if (confirmedCases[i].location === "World") {
             const datetime = confirmedCases[i].date;
@@ -177,16 +182,18 @@ export default Vue.extend({
               totalDeaths: confirmedCases[i].total_deaths
             }; */
 
-            const currentDayData = [
-              milliseconds,
-              confirmedCases[i].total_cases
-            ];
+            const currentTotal = [milliseconds, confirmedCases[i].total_cases];
 
-            worldCases.push(currentDayData);
+            worldCasesTotal.push(currentTotal);
+
+            const currentDeaths = [milliseconds, confirmedCases[i].total_deaths];
+
+            worldCasesDeaths.push(currentDeaths);
           }
         }
 
-        this.$data.series[0].data = worldCases;
+        this.$data.series[0].data = worldCasesTotal;
+        this.$data.series[1].data = worldCasesDeaths;
         resolve();
       });
     }
