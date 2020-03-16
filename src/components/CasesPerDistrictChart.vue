@@ -56,17 +56,38 @@ export default Vue.extend({
       ],
       chart: {
         stacked: false,
-        type: "donut",
+        type: "bar",
         toolbar: {
           show: false
         }
       },
       dataLabels: {
-        enabled: false
+        enabled: true,
+        textAnchor: "middle",
+        offsetY: -10
       },
       legend: {
         show: true,
         position: "right"
+      },
+      grid: {
+        borderColor: "#525252",
+        strokeDashArray: 7
+      },
+      xaxis: {
+        ticks: 0,
+        categories: [],
+        labels: {
+          show: false
+        }
+      },
+      plotOptions: {
+        bar: {
+          columnWidth: "90%",
+          dataLabels: {
+            position: "top"
+          }
+        }
       },
       responsive: [
         {
@@ -126,7 +147,7 @@ export default Vue.extend({
       }
 
       // Add the count to the name of the healthCareDistrict
-      const lables: string[] = [];
+      const labels: string[] = [];
       const series: number[] = [];
 
       for (let i = 0; i < casesPerHealthCareDistrict.length; i++) {
@@ -134,15 +155,24 @@ export default Vue.extend({
           casesPerHealthCareDistrict[i].healthCareDistrict;
         const count = casesPerHealthCareDistrict[i].count;
 
-        casesPerHealthCareDistrict[
-          i
-        ].healthCareDistrict = `${healthCareDistrict} (${count})`;
-        lables.push(casesPerHealthCareDistrict[i].healthCareDistrict);
+        casesPerHealthCareDistrict[i].healthCareDistrict = `${healthCareDistrict}`;
+        labels.push(casesPerHealthCareDistrict[i].healthCareDistrict);
         series.push(count);
       }
 
-      this.$data.options.labels = lables;
-      this.$data.series = series;
+      // Create data series
+      this.$data.options.xaxis.categories = labels;
+      this.$data.options.xaxis.ticks = labels.length;
+
+      for (let i = 0; i < labels.length; i++) {
+        const newDataSeries = {
+          name: labels[i],
+          data: [series[i]]
+        };
+
+        this.$data.series.push(newDataSeries);
+      }
+
       this.$data.isLoading = false;
     }
   },
