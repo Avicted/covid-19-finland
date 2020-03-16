@@ -109,7 +109,10 @@ export default Vue.extend({
         }
       ],
       tooltip: {
-        fillSeriesColor: false
+        fillSeriesColor: false,
+        x: {
+          show: false
+        }
       }
     },
     series: []

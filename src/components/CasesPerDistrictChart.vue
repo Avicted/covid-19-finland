@@ -111,7 +111,10 @@ export default Vue.extend({
       tooltip: {
         fillSeriesColor: false,
         shared: false,
-        followCursor: true
+        followCursor: true,
+        x: {
+          show: false
+        }
       }
     },
     series: []
