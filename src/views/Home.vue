@@ -27,6 +27,9 @@
       <v-col cols="12" sm="12" md="6">
         <InfectionSourceChart />
       </v-col>
+      <!-- <v-col cols="12" sm="12" md="6">
+        <CasesByDayChartLog />
+      </v-col> -->
     </v-row>
   </div>
 </template>
@@ -57,7 +60,7 @@ export default {
     CumulativeChart,
     CasesPerDistrictChart,
     InfectionSourceChart
-    // CasesByDayChartLog,
+    // CasesByDayChartLog
   }
 };
 </script>

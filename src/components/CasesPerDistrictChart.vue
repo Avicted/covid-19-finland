@@ -109,7 +109,9 @@ export default Vue.extend({
         }
       ],
       tooltip: {
-        fillSeriesColor: false
+        fillSeriesColor: false,
+        shared: false,
+        followCursor: true
       }
     },
     series: []
@@ -117,6 +119,7 @@ export default Vue.extend({
 
   methods: {
     fetchCasesPerHealthCareDistrict() {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const casesPerHealthCareDistrict: string | any[] = [];
 
       const confirmedCases = store.getters["virusCasesFinland/confirmed"];
@@ -154,6 +157,7 @@ export default Vue.extend({
           casesPerHealthCareDistrict[i].healthCareDistrict;
         const count = casesPerHealthCareDistrict[i].count;
 
+        // eslint-disable-next-line prettier/prettier
         casesPerHealthCareDistrict[i].healthCareDistrict = `${healthCareDistrict}`;
         labels.push(casesPerHealthCareDistrict[i].healthCareDistrict);
         series.push(count);

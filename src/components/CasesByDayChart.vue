@@ -1,23 +1,13 @@
 <template>
-  <v-card 
-    id="card"
-    >
+  <v-card id="card">
     <v-card-title>
       Cases by day
-      
+
       <v-spacer></v-spacer>
 
-      <v-menu 
-        v-if="series[0].data !== null || !isLoading"
-        bottom 
-        left>
+      <v-menu v-if="series[0].data !== null || !isLoading" bottom left>
         <template v-slot:activator="{ on }">
-          <v-btn
-            icon
-            v-on="on"
-            outlined 
-            color="primary"
-          >
+          <v-btn icon v-on="on" outlined color="primary">
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
@@ -29,7 +19,7 @@
             @click="updateChartType(item)"
             dense
             color="primary"
-            :class='[item === type ? "v-list-item--active" : ""]'
+            :class="[item === type ? 'v-list-item--active' : '']"
           >
             <v-list-item-title>{{ item }}</v-list-item-title>
           </v-list-item>
@@ -38,7 +28,7 @@
     </v-card-title>
 
     <v-progress-circular
-      v-if="series[0].data == null || isLoading == true" 
+      v-if="series[0].data == null || isLoading == true"
       id="progress-loader"
       :size="50"
       color="primary"
@@ -51,8 +41,9 @@
       width="100%"
       height="75%"
       :type="type"
-      :options="options" 
-      :series="series">
+      :options="options"
+      :series="series"
+    >
     </apexchart>
   </v-card>
 </template>
@@ -60,7 +51,7 @@
 <script lang="ts">
 import Vue from "vue";
 import store from "../store";
-import VueApexCharts from 'vue-apexcharts';
+import VueApexCharts from "vue-apexcharts";
 import moment from "moment";
 
 export default Vue.extend({
@@ -72,17 +63,13 @@ export default Vue.extend({
 
   data: () => ({
     isLoading: true,
-    type: 'bar',
-    chartStyles: [
-      'bar',
-      'line',
-      'area'
-    ],
+    type: "bar",
+    chartStyles: ["bar", "line", "area"],
     options: {
       theme: {
-        mode: 'dark', 
+        mode: "dark"
       },
-      colors: ['#ce93d8', '#81c784', '#e57373'],
+      colors: ["#ce93d8", "#81c784", "#e57373"],
       chart: {
         stacked: false,
         toolbar: {
@@ -94,65 +81,67 @@ export default Vue.extend({
             zoomin: true,
             zoomout: true,
             pan: true,
-            reset: true,
-          },
-        },
+            reset: true
+          }
+        }
       },
       xaxis: {
-        type: 'datetime',
+        type: "datetime",
         crosshairs: {
           show: true,
           width: 1,
-          position: 'back',
-          opacity: 0.9,        
+          position: "back",
+          opacity: 0.9,
           stroke: {
-            color: '#b6b6b6',
+            color: "#b6b6b6",
             width: 1,
-            dashArray: 3,
-          },
+            dashArray: 3
+          }
         }
       },
       plotOptions: {
         bar: {
           horizontal: false,
-          columnWidth: '90%',
-        },
+          columnWidth: "90%"
+        }
       },
       stroke: {
         show: true,
-        curve: 'straight',
+        curve: "straight",
         colors: undefined,
         width: 2,
-        dashArray: 0,      
+        dashArray: 0
       },
       dataLabels: {
         enabled: false
       },
       tooltip: {
         shared: true,
-        followCursor: true,
+        followCursor: true
       },
       legend: {
         show: true,
-        position: 'bottom',
+        position: "bottom"
       },
       grid: {
-        borderColor: '#525252',
-        strokeDashArray: 7,
+        borderColor: "#525252",
+        strokeDashArray: 7
       }
     },
-    series: [{
-      name: 'New infections',
-      data: []
-    },
-    {
-      name: 'Recovered',
-      data: []
-    },
-    {
-      name: 'Deaths',
-      data: []
-    }]
+    series: [
+      {
+        name: "New infections",
+        data: []
+      },
+      {
+        name: "Recovered",
+        data: []
+      },
+      {
+        name: "Deaths",
+        data: []
+      }
+    ]
   }),
 
   methods: {
@@ -192,6 +181,7 @@ export default Vue.extend({
 
         const cases = store.getters[`virusCasesFinland/${selectedCaseType}`];
         const casesCount = cases.length;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const casesByDay: any = [];
 
         const generatedDates = [];
@@ -239,7 +229,9 @@ export default Vue.extend({
         const oldest = moment(oldestDate);
 
         for (let m = moment(oldest); m.isBefore(today); m.add(1, "days")) {
-          const currentMilliseconds = new Date(m.format("YYYY-MM-DD")).getTime();
+          const currentMilliseconds = new Date(
+            m.format("YYYY-MM-DD")
+          ).getTime();
           generatedDates.push([currentMilliseconds, 0]);
         }
 
@@ -263,6 +255,7 @@ export default Vue.extend({
   async mounted() {
     this.$data.isLoading = true;
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this.$store.subscribe(async (mutation, state) => {
       if (mutation.type === "virusCasesFinland/DATA_FETCHED") {
         await this.fetchData("confirmed");
