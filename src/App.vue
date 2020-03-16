@@ -4,7 +4,7 @@
       
     </v-app-bar> -->
 
-    <v-container style="margin-bottom: 120px;">
+    <v-container>
       <v-row>
         <v-col cols="12">
           <p class="display-1 mb-0" style="font-family: monospace !important;">
@@ -13,34 +13,34 @@
         </v-col>
       </v-row>
 
-      <v-content>
+      <v-content style="margin-bottom: 25px;">
         <router-view></router-view>
       </v-content>
+
+      <v-footer
+        class="font-weight-light"
+        style="background: transparent; font-family: monospace;"
+      >
+        <v-col class="text-center" cols="12">
+          <p class="mb-0">
+            <a href="https://github.com/Avicted/covid-19-finland">Source code</a>
+          </p>
+          <p class="mb-0">
+            <a href="https://github.com/HS-Datadesk/koronavirus-avoindata">Finland data source</a>
+            | Helsingin Sanomat
+          </p>
+          <p class="mb-0">
+            <a href="https://ourworldindata.org/coronavirus-source-data">Global data source</a>
+            | World Health Organization (WHO)
+          </p>
+          <p class="mb-0">
+            Developed by:
+            <a href="https://twitter.com/Victoranderssen">Victor Anderssén</a>
+          </p>
+        </v-col>
+      </v-footer>
     </v-container>
 
-    <v-footer
-      absolute
-      class="font-weight-light"
-      style="background: transparent; font-family: monospace;"
-    >
-      <v-col class="text-center" cols="12">
-        <p class="mb-0">
-          <a href="https://github.com/Avicted/covid-19-finland">Source code</a>
-        </p>
-        <p class="mb-0">
-          <a href="https://github.com/HS-Datadesk/koronavirus-avoindata">Finland data source</a>
-          | Helsingin Sanomat
-        </p>
-        <p class="mb-0">
-          <a href="https://ourworldindata.org/coronavirus-source-data">Global data source</a>
-          | World Health Organization (WHO)
-        </p>
-        <p class="mb-0">
-          Developed by:
-          <a href="https://twitter.com/Victoranderssen">Victor Anderssén</a>
-        </p>
-      </v-col>
-    </v-footer>
   </v-app>
 </template>
 
