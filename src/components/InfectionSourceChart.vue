@@ -1,26 +1,23 @@
 <template>
-  <v-card
-    id="card"
-    min-height="500px"
-    max-height="500px"
-    >
+  <v-card id="card">
     <v-card-title>
       Infection source countries
     </v-card-title>
 
     <v-progress-circular
-      v-if="isLoading == true" 
+      v-if="isLoading == true"
       id="progress-loader"
       :size="50"
       color="primary"
       indeterminate
     ></v-progress-circular>
-    <apexchart 
+    <apexchart
       v-else
       width="100%"
       height="80%"
-      :options="options" 
-      :series="series">
+      :options="options"
+      :series="series"
+    >
     </apexchart>
   </v-card>
 </template>
@@ -28,8 +25,6 @@
 <script lang="ts">
 import Vue from "vue";
 import store from "../store";
-import VueApexCharts from 'vue-apexcharts';
-import moment from "moment";
 
 export default Vue.extend({
   name: "InfectionSourceChart",
@@ -38,11 +33,10 @@ export default Vue.extend({
     isLoading: true,
     options: {
       theme: {
-        mode: 'dark',
-        palette: 'palette7' // upto palette10
+        mode: "dark"
       },
       colors: [
-        "#e57373", 
+        "#e57373",
         "#f06292",
         "#ba68c8",
         "#9575cd",
@@ -62,19 +56,19 @@ export default Vue.extend({
       ],
       chart: {
         stacked: false,
-        type: 'donut',
+        type: "donut",
         toolbar: {
-          show: false,
-        },
+          show: false
+        }
       },
       dataLabels: {
         enabled: false
       },
       legend: {
         show: true,
-        position: 'right',
+        position: "right"
       },
-     responsive: [
+      responsive: [
         {
           breakpoint: 1400,
           options: {
@@ -88,34 +82,41 @@ export default Vue.extend({
             },
             chart: {
               width: "100%",
-              height: "90%"
+              height: "80%"
             }
           }
         }
       ],
       tooltip: {
-        fillSeriesColor: false,
+        fillSeriesColor: false
       },
       labels: []
     },
-    series: [],
+    series: []
   }),
 
   methods: {
     fetchInfectionSourceCountries() {
-      const casesPerSourceCountry: string|any[] = [];
+      const casesPerSourceCountry: string | any[] = [];
 
-      const confirmedCases = store.getters['virusCasesFinland/confirmed'];
+      const confirmedCases = store.getters["virusCasesFinland/confirmed"];
       const confirmedCasesCount = confirmedCases.length;
 
       for (let i = 0; i < confirmedCasesCount; i++) {
         let found = false;
-        if (confirmedCases[i].infectionSourceCountry === "null" || confirmedCases[i].infectionSourceCountry === null || confirmedCases[i].infectionSourceCountry === "") {
+        if (
+          confirmedCases[i].infectionSourceCountry === "null" ||
+          confirmedCases[i].infectionSourceCountry === null ||
+          confirmedCases[i].infectionSourceCountry === ""
+        ) {
           confirmedCases[i].infectionSourceCountry = "Unknown";
         }
 
         for (let j = 0; j < casesPerSourceCountry.length; j++) {
-          if (confirmedCases[i].infectionSourceCountry === casesPerSourceCountry[j].infectionSourceCountry) {
+          if (
+            confirmedCases[i].infectionSourceCountry ===
+            casesPerSourceCountry[j].infectionSourceCountry
+          ) {
             found = true;
             casesPerSourceCountry[j].count = casesPerSourceCountry[j].count + 1;
             break;
@@ -135,10 +136,13 @@ export default Vue.extend({
       const series: number[] = [];
 
       for (let i = 0; i < casesPerSourceCountry.length; i++) {
-        const infectionSourceCountry = casesPerSourceCountry[i].infectionSourceCountry;
+        const infectionSourceCountry =
+          casesPerSourceCountry[i].infectionSourceCountry;
         const count = casesPerSourceCountry[i].count;
 
-        casesPerSourceCountry[i].infectionSourceCountry = `${infectionSourceCountry} (${count})`;
+        casesPerSourceCountry[
+          i
+        ].infectionSourceCountry = `${infectionSourceCountry} (${count})`;
         lables.push(casesPerSourceCountry[i].infectionSourceCountry);
         series.push(count);
       }
@@ -153,11 +157,11 @@ export default Vue.extend({
     this.$data.isLoading = true;
 
     this.$store.subscribe((mutation, state) => {
-      if (mutation.type === 'virusCasesFinland/DATA_FETCHED') {
+      if (mutation.type === "virusCasesFinland/DATA_FETCHED") {
         this.fetchInfectionSourceCountries();
       }
     });
-  },
+  }
 });
 </script>
 
@@ -168,8 +172,12 @@ export default Vue.extend({
   margin: 0 auto
   margin-top: 160px
 
+#card
+  min-height: 500px
+  max-height: 500px
+
 @media (max-width: 1400px)
   #card
-    min-height: 700px
-    max-height: 700px
+    min-height: 600px
+    max-height: 600px
 </style>
