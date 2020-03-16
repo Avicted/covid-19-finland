@@ -35,7 +35,7 @@
     <v-row>
       <v-col cols="12">
         <p class="display-1 mb-0" style="font-family: monospace !important;">
-          GLobal COVID-19 data
+          Global COVID-19 data
         </p>
       </v-col>
     </v-row>
