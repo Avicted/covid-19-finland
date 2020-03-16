@@ -49,6 +49,7 @@ export default Vue.extend({
 
   mounted() {
     store.dispatch("virusCasesFinland/fetchData");
+    store.dispatch("virusCasesGlobal/fetchData");
   }
 });
 </script>
