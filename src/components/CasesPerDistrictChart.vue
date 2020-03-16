@@ -75,7 +75,7 @@ export default Vue.extend({
         strokeDashArray: 7
       },
       xaxis: {
-        ticks: 0,
+        type: "category",
         categories: [],
         labels: {
           show: false
@@ -83,7 +83,7 @@ export default Vue.extend({
       },
       plotOptions: {
         bar: {
-          columnWidth: "90%",
+          columnWidth: "100%",
           dataLabels: {
             position: "top"
           }
@@ -110,8 +110,7 @@ export default Vue.extend({
       ],
       tooltip: {
         fillSeriesColor: false
-      },
-      labels: []
+      }
     },
     series: []
   }),
@@ -162,7 +161,7 @@ export default Vue.extend({
 
       // Create data series
       this.$data.options.xaxis.categories = labels;
-      this.$data.options.xaxis.ticks = labels.length;
+      // this.$data.options.xaxis.tickAmount = labels.length;
 
       for (let i = 0; i < labels.length; i++) {
         const newDataSeries = {
