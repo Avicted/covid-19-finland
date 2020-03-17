@@ -26,6 +26,8 @@ npm run build
 npm run lint
 ```
 
-## Data source
+## Data source Finland
 https://github.com/HS-Datadesk/koronavirus-avoindata
 
+## Data source global
+https://ourworldindata.org/coronavirus-source-data
