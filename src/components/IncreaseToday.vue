@@ -73,10 +73,10 @@ export default Vue.extend({
       }
 
       // Generate missing dates
-      const today = moment(todaysDate);
-      const oldest = moment(oldestDate);
+      const today = moment(todaysDate).format("YYYY-MM-DD");
+      const oldest = moment(oldestDate).format("YYYY-MM-DD");
 
-      for (let m = moment(oldest); m.diff(today, 'days') <= 0; m.add(1, 'days')) {
+      for (let m = moment(oldest); m.isSameOrBefore(today); m.add(1, "days")) {
         const currentMilliseconds = new Date(m.format('YYYY-MM-DD')).getTime();
         generatedDates.push([currentMilliseconds, 0]);
       }
@@ -92,9 +92,8 @@ export default Vue.extend({
       }
 
       // Calculate the increase in cases today compared to yesterday
-      const casesToday = generatedDates[generatedDates.length - 2][1];
-      const casesYesterday = generatedDates[generatedDates.length - 3][1];
-
+      const casesToday = generatedDates[generatedDates.length - 1][1];
+      const casesYesterday = generatedDates[generatedDates.length - 2][1];
 
       const total = casesToday - casesYesterday;
 
