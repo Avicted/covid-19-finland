@@ -71,9 +71,9 @@ export default Vue.extend({
     isLoading: true,
     type: 'area',
     chartStyles: [
-      'bar',
+      'area',
       'line',
-      'area'
+      'bar'
     ],
     options: {
       theme: {
@@ -232,10 +232,10 @@ export default Vue.extend({
         }
 
         // Generate missing dates
-        const today = moment(todaysDate);
-        const oldest = moment(oldestDate);
+        const today = moment(todaysDate).format("YYYY-MM-DD");
+        const oldest = moment(oldestDate).format("YYYY-MM-DD");
 
-        for (let m = moment(oldest); m.isBefore(today); m.add(1, "days")) {
+        for (let m = moment(oldest); m.isSameOrBefore(today); m.add(1, "days")) {
           const currentMilliseconds = new Date(m.format("YYYY-MM-DD")).getTime();
           generatedDates.push([currentMilliseconds, 0]);
         }
