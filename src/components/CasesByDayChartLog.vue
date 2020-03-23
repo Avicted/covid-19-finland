@@ -98,12 +98,21 @@ export default Vue.extend({
           }
         }
       },
-      yaxis: {
-        seriesName: "New infections",
+      yaxis:{
+        // seriesName: "New infections",
         tickAmount: 4,
         logarithmic: true,
-        min: 10,
-        max: 500
+        min: 0,
+        max: 1000,
+        labels: {
+          formatter: function(value: number) {
+            if (value > 1000) {
+              return `${value / 1000}k`;
+            } else {
+              return value;
+            }
+          }
+        }
       },
       plotOptions: {
         bar: {
@@ -141,12 +150,10 @@ export default Vue.extend({
       },
       {
         name: "Recovered",
-        logarithmic: true,
         data: []
       },
       {
         name: "Deaths",
-        logarithmic: true,
         data: []
       }
     ]

@@ -77,7 +77,7 @@ export default {
     CumulativeChart,
     CasesPerDistrictChart,
     InfectionSourceChart,
-    // CasesByDayChartLog
+    // CasesByDayChartLog,
 
     GlobalCumulativeChart
   }
@@ -91,4 +91,10 @@ export default {
 
 .menuable__content__active
   z-index: 1000 !important
+
+.v-application
+  background: linear-gradient(#0e1c21, #05090c) !important
+
+  .v-card
+    background-color: rgba(12, 12, 12, 0.75)
 </style>
