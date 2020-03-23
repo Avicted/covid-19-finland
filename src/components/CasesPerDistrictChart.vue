@@ -132,13 +132,13 @@ export default Vue.extend({
         let found = false;
 
         for (let j = 0; j < casesPerHealthCareDistrict.length; j++) {
-          if (
-            confirmedCases[i].healthCareDistrict ===
-            casesPerHealthCareDistrict[j].healthCareDistrict
-          ) {
+          if (confirmedCases[i].healthCareDistrict === null) {
+            confirmedCases[i].healthCareDistrict = "Unknown";
+          }
+
+          if (confirmedCases[i].healthCareDistrict === casesPerHealthCareDistrict[j].healthCareDistrict) {
             found = true;
-            casesPerHealthCareDistrict[j].count =
-              casesPerHealthCareDistrict[j].count + 1;
+            casesPerHealthCareDistrict[j].count = casesPerHealthCareDistrict[j].count + 1;
             break;
           }
         }
