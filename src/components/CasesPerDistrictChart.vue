@@ -14,7 +14,7 @@
     <apexchart
       v-else
       width="100%"
-      height="80%"
+      height="85%"
       :options="options"
       :series="series"
     >
@@ -64,7 +64,7 @@ export default Vue.extend({
       dataLabels: {
         enabled: true,
         textAnchor: "middle",
-        offsetY: -10
+        offsetY: -20
       },
       legend: {
         show: true,
@@ -103,7 +103,7 @@ export default Vue.extend({
             },
             chart: {
               width: "100%",
-              height: "90%"
+              height: "85%"
             }
           }
         }
@@ -211,11 +211,11 @@ export default Vue.extend({
   margin-top: 160px
 
 #card
-  min-height: 500px
-  max-height: 500px
+  min-height: 520px
+  max-height: 520px
 
 @media (max-width: 1400px)
   #card
-    min-height: 600px
-    max-height: 600px
+    min-height: 620px
+    max-height: 620px
 </style>

@@ -121,7 +121,12 @@ export default Vue.extend({
         followCursor: true,
         y: {
           formatter: function(value: number) {
-            return value;
+            if (value > 1000) {
+              const result = (value / 1000).toFixed(2);
+              return `${result}k`;
+            } else {
+              return value;
+            }
           }
         }
       },
