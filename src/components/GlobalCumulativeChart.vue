@@ -174,7 +174,7 @@ export default Vue.extend({
         for (let i = 0; i < confirmedCasesCount; i++) {
           if (confirmedCases[i].location === "World") {
             const datetime = confirmedCases[i].date;
-            const date = new Date(datetime).toISOString().substr(0, 10);
+            const date = new Date(datetime).toISOString();
             const milliseconds = new Date(date).getTime();
 
             /* const currentDayData = {

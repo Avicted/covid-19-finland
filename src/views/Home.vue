@@ -93,7 +93,7 @@ export default {
   z-index: 1000 !important
 
 .v-application
-  background: linear-gradient(#0e1c21, #05090c) !important
+  background: linear-gradient(#111c29, #0b1117) !important
 
   .v-card
     background-color: rgba(12, 12, 12, 0.75)

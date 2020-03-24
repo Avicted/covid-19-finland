@@ -18,7 +18,7 @@ const getters = {
 // actions
 const actions = {
     fetchData({ commit }: any)  {         
-        fetch("https://covid.ourworldindata.org/data/full_data.csv")
+        fetch("https://covid.ourworldindata.org/data/ecdc/full_data.csv")
         .then(response => response.text())
         .then((response) => {
             csv({
@@ -26,7 +26,6 @@ const actions = {
             })
             .fromString(response.toString())
             .then((result: any) => {
-                // console.log(result);
                 commit("DATA_FETCHED", result);
             })  
         })
