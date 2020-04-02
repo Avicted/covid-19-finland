@@ -1,21 +1,20 @@
 <template>
-  <v-card 
-    min-height="150px"
-    max-height="150px"
-    >
-    <v-card-title class="pb-2">
+  <v-card min-height="110px" max-height="110px">
+    <v-card-title class="pb-0 pt-2">
       Infections change today
     </v-card-title>
 
     <v-progress-circular
-      v-if="increaseToday == null || isLoading == true" 
+      v-if="increaseToday == null || isLoading == true"
       id="progress-loader"
       :size="50"
       color="primary"
       indeterminate
     ></v-progress-circular>
     <v-card-text v-else>
-      <p class="display-3" style="text-align: center; color: #cacaca;">{{ increaseToday }}</p>
+      <p class="display-2" style="text-align: center; color: #cacaca;">
+        {{ increaseToday }}
+      </p>
     </v-card-text>
   </v-card>
 </template>
@@ -30,15 +29,15 @@ export default Vue.extend({
 
   data: () => ({
     isLoading: true,
-    increaseToday: null,
+    increaseToday: null
   }),
 
   methods: {
     fetchIncreaseToday() {
-      const confirmedCases = store.getters['virusCasesFinland/confirmed'];
+      const confirmedCases = store.getters["virusCasesFinland/confirmed"];
       const confirmedCasesCount = confirmedCases.length;
-      const confirmedCasesByDay: string|any[] = [];
-      
+      const confirmedCasesByDay: string | any[] = [];
+
       const generatedDates = [];
       const todaysDate = new Date().toISOString();
       let oldestDate = new Date().toISOString();
@@ -46,7 +45,7 @@ export default Vue.extend({
       for (let i = 0; i < confirmedCasesCount; i++) {
         const datetime = confirmedCases[i].date;
         const date = new Date(datetime).toISOString().substr(0, 10);
-        const milliseconds = new Date(date).getTime(); 
+        const milliseconds = new Date(date).getTime();
 
         if (Date.parse(datetime) < Date.parse(oldestDate)) {
           oldestDate = datetime;
@@ -77,7 +76,7 @@ export default Vue.extend({
       const oldest = moment(oldestDate).format("YYYY-MM-DD");
 
       for (let m = moment(oldest); m.isSameOrBefore(today); m.add(1, "days")) {
-        const currentMilliseconds = new Date(m.format('YYYY-MM-DD')).getTime();
+        const currentMilliseconds = new Date(m.format("YYYY-MM-DD")).getTime();
         generatedDates.push([currentMilliseconds, 0]);
       }
 
@@ -86,7 +85,8 @@ export default Vue.extend({
         for (let j = 0; j < confirmedCasesByDay.length; j++) {
           const currentCaseDate = confirmedCasesByDay[j][0];
           if (currentCaseDate === generatedDates[i][0]) {
-            generatedDates[i][1] = generatedDates[i][1] + confirmedCasesByDay[j][1];
+            generatedDates[i][1] =
+              generatedDates[i][1] + confirmedCasesByDay[j][1];
           }
         }
       }
@@ -112,16 +112,19 @@ export default Vue.extend({
   mounted() {
     this.$data.isLoading = true;
 
-    if (this.$data.increaseToday === null && store.getters['virusCasesFinland/confirmed'] !== null) {
+    if (
+      this.$data.increaseToday === null &&
+      store.getters["virusCasesFinland/confirmed"] !== null
+    ) {
       this.fetchIncreaseToday();
     }
-    
+
     this.$store.subscribe((mutation, state) => {
-      if (mutation.type === 'virusCasesFinland/DATA_FETCHED') {
+      if (mutation.type === "virusCasesFinland/DATA_FETCHED") {
         this.fetchIncreaseToday();
       }
     });
-  },
+  }
 });
 </script>
 
@@ -130,4 +133,8 @@ export default Vue.extend({
   display: block
   width: 100px
   margin: 0 auto
+
+.v-card__text
+  p
+    font-family: monospace !important
 </style>

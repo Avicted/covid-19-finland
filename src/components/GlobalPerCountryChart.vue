@@ -1,31 +1,36 @@
 <template>
   <v-card min-height="700px" max-height="700px">
-    <v-card-title>
-      Global per country chart
+    <v-card-title class="justify-space-between">
+      Global confirmed cases (cumulative)
       <v-spacer></v-spacer>
 
       <v-select
+        v-if="rawData !== null && !isLoading"
+        class="country-dropdown mr-6"
         :items="countries"
         v-model="selectedCountries"
         :menu-props="{ maxHeight: '600' }"
         label="Select countries"
+        v-on:input="limiter"
         multiple
-        :loading="isLoading"
         outlined
+        single-line
         hint="Select countries"
+        persistent-hint
         dense
       >
         <template v-slot:selection="{ item, index }">
-          <v-chip v-if="index === 0">
+          <v-chip small v-if="index === 0">
             <span>{{ item }}</span>
           </v-chip>
-          <span v-if="index === 1" class="grey--text caption">
-            (+{{ selectedCountries.length - 1 }} others)
-          </span>
+          <span
+            v-if="index === 1"
+            class="grey--text caption"
+          >(+{{ selectedCountries.length - 1 }} others)</span>
         </template>
       </v-select>
 
-      <v-menu v-if="series !== null && !isLoading" bottom left>
+      <v-menu v-if="rawData !== null && !isLoading" bottom left>
         <template v-slot:activator="{ on }">
           <v-btn icon v-on="on" outlined color="primary">
             <v-icon>mdi-dots-vertical</v-icon>
@@ -48,7 +53,7 @@
     </v-card-title>
 
     <v-progress-circular
-      v-if="series == null && isLoading == true"
+      v-if="rawData !== null && isLoading"
       id="progress-loader"
       :size="50"
       color="primary"
@@ -59,11 +64,18 @@
       ref="chart"
       v-else
       width="100%"
-      height="75%"
+      height="85%"
       :type="type"
       :options="options"
       :series="series"
     ></apexchart>
+
+    <v-snackbar v-model="snackbar" color="primary" style="color: black;">
+      {{ snackbarText }}
+      <v-btn text @click="snackbar = false" color="black">
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-card>
 </template>
 
@@ -82,6 +94,8 @@ export default Vue.extend({
     chartStyles: ["bar", "line", "area"],
     countries: [],
     selectedCountries: ["Finland"],
+    snackbar: false,
+    snackbarText: "",
     options: {
       theme: {
         mode: "dark"
@@ -106,6 +120,7 @@ export default Vue.extend({
         "#a1887f"
       ],
       chart: {
+        fontFamily: "monospace",
         stacked: false,
         toolbar: {
           show: true,
@@ -171,7 +186,11 @@ export default Vue.extend({
         shared: true,
         followCursor: true,
         y: {
-          formatter: function(value: number) {
+          formatter: function(value: number, { series, seriesIndex, dataPointIndex, w }: any) {
+            if (seriesIndex >= 10) {
+              return;
+            }
+
             if (value > 1000) {
               const result = (value / 1000).toFixed(0);
               return `${result}k`;
@@ -197,16 +216,7 @@ export default Vue.extend({
         strokeDashArray: 7
       }
     },
-    series: [
-      /* {
-        name: "Infections World (cumulative)",
-        data: []
-      },
-      {
-        name: "Deaths World (cumulative)",
-        data: []
-      } */
-    ]
+    series: []
   }),
 
   watch: {
@@ -235,6 +245,15 @@ export default Vue.extend({
       this.$data.series = updatedDataSeries;
     },
 
+    limiter(event: any) {
+      if (event.length > 10) {
+        const message = "You can only select 10 countries at a time";
+        this.$data.snackbarText = message;
+        this.$data.snackbar = true;
+        event.pop();
+      }
+    },
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     groupBy<T extends any, K extends keyof T>(array: T[], key: K): any {
       return array.reduce((objectsByKeyValue, obj) => {
@@ -252,22 +271,10 @@ export default Vue.extend({
           reject();
         }
 
-        // this.$data.rawData = confirmedCases;
-
         let casesPerCountry = [];
 
         // Map all cases to an array of countries with each date as an object
         casesPerCountry = this.groupBy(confirmedCases, "location");
-
-        /* const currentDayData = {
-          date: confirmedCases[i].date,
-          milliseconds: milliseconds,
-          location: confirmedCases[i].location,
-          newCases: confirmedCases[i].new_cases,
-          newDeaths: confirmedCases[i].new_deaths,
-          totalCases: confirmedCases[i].total_cases,
-          totalDeaths: confirmedCases[i].total_deaths
-        }; */
 
         // @Note apexcharts shared tooltips does not work with missing dates, therefore
         // we need to generate the same time series for all data series.
@@ -310,12 +317,8 @@ export default Vue.extend({
             continue;
           }
 
-          /* if (countryName !== "Finland" && countryName !== "Sweden") {
-            continue;
-          } */
-
           const dataSeries: any = {
-            name: `${countryName}`,
+            name: countryName,
             data: []
           };
 
@@ -346,7 +349,6 @@ export default Vue.extend({
             }
           }
 
-          // this.$data.series.push(dataSeries);
           this.$data.rawData.push(dataSeries);
         }
 
@@ -363,6 +365,26 @@ export default Vue.extend({
       if (mutation.type === "virusCasesGlobal/DATA_FETCHED") {
         await this.fetchData();
         this.updateChartData(this.selectedCountries);
+
+        // Set no data for the chart, if no country is selected
+        this.$data.options = {
+          ...this.$data.options,
+          ...{
+            noData: {
+              text: "Select countries to view data",
+              align: "center",
+              verticalAlign: "middle",
+              offsetX: 0,
+              offsetY: 0,
+              style: {
+                color: "#ffb74d",
+                fontSize: "16px",
+                fontFamily: "monospace"
+              }
+            }
+          }
+        };
+
         this.$data.isLoading = false;
       }
     });
@@ -375,5 +397,14 @@ export default Vue.extend({
   display: block
   width: 100px
   margin: 0 auto
-  margin-top: 120px
+  margin-top: 240px
+
+.country-dropdown
+  max-width: 300px
+  height: 40px
+
+@media (max-width: 700px)
+  .country-dropdown
+    max-width: 80%
+    margin-right: 0
 </style>

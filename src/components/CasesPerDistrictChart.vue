@@ -14,7 +14,7 @@
     <apexchart
       v-else
       width="100%"
-      height="85%"
+      height="87%"
       :options="options"
       :series="series"
     >
@@ -55,6 +55,7 @@ export default Vue.extend({
         "#a1887f"
       ],
       chart: {
+        fontFamily: "monospace",
         stacked: false,
         type: "bar",
         toolbar: {

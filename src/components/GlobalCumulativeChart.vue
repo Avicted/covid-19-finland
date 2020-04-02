@@ -2,7 +2,6 @@
   <v-card min-height="400px" max-height="400px">
     <v-card-title>
       Cases by day (cumulative)
-
       <v-spacer></v-spacer>
 
       <v-menu v-if="series[0].data !== null || !isLoading" bottom left>
@@ -64,6 +63,7 @@ export default Vue.extend({
       },
       colors: ["#ce93d8", "#e57373"],
       chart: {
+        fontFamily: "monospace",
         stacked: false,
         toolbar: {
           show: true,
@@ -148,7 +148,7 @@ export default Vue.extend({
     },
     series: [
       {
-        name: "Infections World (cumulative)",
+        name: "Cases World (cumulative)",
         data: []
       },
       {

@@ -70,6 +70,7 @@ export default Vue.extend({
       },
       colors: ["#ce93d8", "#81c784", "#e57373"],
       chart: {
+        fontFamily: "monospace",
         stacked: false,
         toolbar: {
           show: true,

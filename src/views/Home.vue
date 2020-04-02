@@ -92,15 +92,36 @@ export default {
 </script>
 
 <style lang="sass">
+#app
+  font-family: monospace !important
+
 .apexcharts-canvas
   &.apexcharts-theme-dark
     background: transparent !important
+    .apexcharts-tooltip
+      .apexcharts-tooltip-series-group
+        padding-bottom: 5px
+        .apexcharts-tooltip-text
+          line-height: 12px
+
+.v-menu__content
+  &::-webkit-scrollbar
+    height: 8px
+    width: 8px
+
+  &::-webkit-scrollbar-track
+    background: #2b2b2b
+    border-radius: 10px
+
+  &::-webkit-scrollbar-thumb
+    background: #6f6f6f
+    border-radius: 8px
 
 .menuable__content__active
   z-index: 1000 !important
 
 .v-application
-  background: linear-gradient(#111c29, #0b1117) !important
+  background: linear-gradient(#182833, #0b0f17) !important
 
   .v-card
     background-color: rgba(12, 12, 12, 0.75)
