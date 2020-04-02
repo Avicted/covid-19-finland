@@ -4,7 +4,28 @@
       Global per country chart
       <v-spacer></v-spacer>
 
-      <v-menu v-if="series !== null || !isLoading" bottom left>
+      <v-select
+        :items="countries"
+        v-model="selectedCountries"
+        :menu-props="{ maxHeight: '600' }"
+        label="Select countries"
+        multiple
+        :loading="isLoading"
+        outlined
+        hint="Select countries"
+        dense
+      >
+        <template v-slot:selection="{ item, index }">
+          <v-chip v-if="index === 0">
+            <span>{{ item }}</span>
+          </v-chip>
+          <span v-if="index === 1" class="grey--text caption">
+            (+{{ selectedCountries.length - 1 }} others)
+          </span>
+        </template>
+      </v-select>
+
+      <v-menu v-if="series !== null && !isLoading" bottom left>
         <template v-slot:activator="{ on }">
           <v-btn icon v-on="on" outlined color="primary">
             <v-icon>mdi-dots-vertical</v-icon>
@@ -27,7 +48,7 @@
     </v-card-title>
 
     <v-progress-circular
-      v-if="series == null || isLoading == true"
+      v-if="series == null && isLoading == true"
       id="progress-loader"
       :size="50"
       color="primary"
@@ -35,6 +56,7 @@
     ></v-progress-circular>
 
     <apexchart
+      ref="chart"
       v-else
       width="100%"
       height="75%"
@@ -54,10 +76,12 @@ export default Vue.extend({
   name: "GlobalPerCountryChart",
 
   data: () => ({
-    rawData: null,
+    rawData: [],
     isLoading: true,
     type: "line",
     chartStyles: ["bar", "line", "area"],
+    countries: [],
+    selectedCountries: ["Finland"],
     options: {
       theme: {
         mode: "dark"
@@ -185,9 +209,30 @@ export default Vue.extend({
     ]
   }),
 
+  watch: {
+    // whenever the selectedCountries changes, this function will run
+    selectedCountries: function(newSelectedCountries, oldSelectedCountries) {
+      this.updateChartData(newSelectedCountries);
+    }
+  },
+
   methods: {
     updateChartType(newChartStyle: string) {
       this.$data.type = newChartStyle;
+    },
+
+    updateChartData(newSelectedCountries: any) {
+      const updatedDataSeries = [];
+
+      for (let i = 0; i < this.$data.rawData.length; i++) {
+        const countryName = this.$data.rawData[i].name;
+
+        if (newSelectedCountries.includes(countryName)) {
+          updatedDataSeries.push(this.$data.rawData[i]);
+        }
+      }
+
+      this.$data.series = updatedDataSeries;
     },
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -207,7 +252,7 @@ export default Vue.extend({
           reject();
         }
 
-        this.$data.rawData = confirmedCases;
+        // this.$data.rawData = confirmedCases;
 
         let casesPerCountry = [];
 
@@ -232,6 +277,8 @@ export default Vue.extend({
 
         // Loop all countries
         for (const countryName in casesPerCountry) {
+          this.$data.countries.push(countryName);
+
           // Loop all cases in selected country
           for (let j = 0; j < casesPerCountry[countryName].length; j++) {
             const datetime = casesPerCountry[countryName][j].date;
@@ -259,13 +306,13 @@ export default Vue.extend({
         // Actual data assignment to chart data series
         // Loop all countries
         for (const countryName in casesPerCountry) {
-          /* if (countryName === "World") {
-            continue;
-          } */
-
-          if (countryName !== "Finland" && countryName !== "Sweden") {
+          if (countryName === "World") {
             continue;
           }
+
+          /* if (countryName !== "Finland" && countryName !== "Sweden") {
+            continue;
+          } */
 
           const dataSeries: any = {
             name: `${countryName}`,
@@ -299,7 +346,8 @@ export default Vue.extend({
             }
           }
 
-          this.$data.series.push(dataSeries);
+          // this.$data.series.push(dataSeries);
+          this.$data.rawData.push(dataSeries);
         }
 
         resolve();
@@ -314,6 +362,7 @@ export default Vue.extend({
     this.$store.subscribe(async (mutation, state) => {
       if (mutation.type === "virusCasesGlobal/DATA_FETCHED") {
         await this.fetchData();
+        this.updateChartData(this.selectedCountries);
         this.$data.isLoading = false;
       }
     });
