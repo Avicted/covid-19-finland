@@ -315,10 +315,6 @@ export default Vue.extend({
         // Actual data assignment to chart data series
         // Loop all countries
         for (const countryName in casesPerCountry) {
-          if (countryName === "World") {
-            continue;
-          }
-
           const dataSeries: any = {
             name: countryName,
             data: []
