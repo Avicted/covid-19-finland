@@ -23,10 +23,9 @@
           <v-chip small v-if="index === 0">
             <span>{{ item }}</span>
           </v-chip>
-          <span
-            v-if="index === 1"
-            class="grey--text caption"
-          >(+{{ selectedCountries.length - 1 }} others)</span>
+          <span v-if="index === 1" class="grey--text caption">
+            (+{{ selectedCountries.length - 1 }} others)
+          </span>
         </template>
       </v-select>
 
@@ -186,7 +185,10 @@ export default Vue.extend({
         shared: true,
         followCursor: true,
         y: {
-          formatter: function(value: number, { series, seriesIndex, dataPointIndex, w }: any) {
+          formatter: function(
+            value: number,
+            { series, seriesIndex, dataPointIndex, w }: any
+          ) {
             if (seriesIndex >= 10) {
               return;
             }
