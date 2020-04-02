@@ -19,7 +19,7 @@ const getters = {
 
 // actions
 const actions = {
-    fetchData({ commit }: any)  {         
+    fetchData({ commit }: any)  {      
         fetch("https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/finnishCoronaData/v2")
         .then(response => response.json() as Promise<any[]>)
         .then((response) => {

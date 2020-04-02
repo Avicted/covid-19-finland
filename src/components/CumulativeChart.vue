@@ -1,24 +1,13 @@
 <template>
-  <v-card 
-    min-height="400px"
-    max-height="400px"
-    >
+  <v-card min-height="400px" max-height="400px">
     <v-card-title>
       Cases by day (cumulative)
 
       <v-spacer></v-spacer>
 
-      <v-menu 
-        v-if="series[0].data !== null || !isLoading"
-        bottom 
-        left>
+      <v-menu v-if="series[0].data !== null || !isLoading" bottom left>
         <template v-slot:activator="{ on }">
-          <v-btn
-            icon
-            v-on="on"
-            outlined 
-            color="primary"
-          >
+          <v-btn icon v-on="on" outlined color="primary">
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
@@ -30,7 +19,7 @@
             @click="updateChartType(item)"
             dense
             color="primary"
-            :class='[item === type ? "v-list-item--active" : ""]'
+            :class="[item === type ? 'v-list-item--active' : '']"
           >
             <v-list-item-title>{{ item }}</v-list-item-title>
           </v-list-item>
@@ -39,21 +28,21 @@
     </v-card-title>
 
     <v-progress-circular
-      v-if="series[0].data == null || isLoading == true" 
+      v-if="series[0].data == null || isLoading == true"
       id="progress-loader"
       :size="50"
       color="primary"
       indeterminate
     ></v-progress-circular>
 
-    <apexchart 
+    <apexchart
       v-else
       width="100%"
       height="75%"
       :type="type"
-      :options="options" 
-      :series="series">
-
+      :options="options"
+      :series="series"
+    >
     </apexchart>
   </v-card>
 </template>
@@ -61,7 +50,7 @@
 <script lang="ts">
 import Vue from "vue";
 import store from "../store";
-import VueApexCharts from 'vue-apexcharts';
+import VueApexCharts from "vue-apexcharts";
 import moment from "moment";
 
 export default Vue.extend({
@@ -69,18 +58,15 @@ export default Vue.extend({
 
   data: () => ({
     isLoading: true,
-    type: 'area',
-    chartStyles: [
-      'area',
-      'line',
-      'bar'
-    ],
+    type: "area",
+    chartStyles: ["area", "line", "bar"],
     options: {
       theme: {
-        mode: 'dark', 
+        mode: "dark"
       },
-      colors: ['#ce93d8', '#81c784', '#e57373'],
+      colors: ["#ce93d8", "#81c784", "#e57373"],
       chart: {
+        fontFamily: "monospace",
         stacked: false,
         toolbar: {
           show: true,
@@ -91,65 +77,67 @@ export default Vue.extend({
             zoomin: true,
             zoomout: true,
             pan: true,
-            reset: true,
-          },
-        },
+            reset: true
+          }
+        }
       },
       xaxis: {
-        type: 'datetime',
+        type: "datetime",
         crosshairs: {
           show: true,
           width: 1,
-          position: 'back',
-          opacity: 0.9,        
+          position: "back",
+          opacity: 0.9,
           stroke: {
-            color: '#b6b6b6',
+            color: "#b6b6b6",
             width: 1,
-            dashArray: 3,
-          },
+            dashArray: 3
+          }
         }
       },
       plotOptions: {
         bar: {
           horizontal: false,
-          columnWidth: '90%',
-        },
+          columnWidth: "90%"
+        }
       },
       dataLabels: {
         enabled: false
       },
       tooltip: {
         shared: true,
-        followCursor: true,
+        followCursor: true
       },
       legend: {
         show: true,
-        position: 'bottom',
+        position: "bottom"
       },
       stroke: {
         show: true,
-        curve: 'straight',
+        curve: "straight",
         colors: undefined,
         width: 2,
-        dashArray: 0,      
+        dashArray: 0
       },
       grid: {
-        borderColor: '#525252',
-        strokeDashArray: 7,
+        borderColor: "#525252",
+        strokeDashArray: 7
       }
     },
-    series: [{
-      name: 'Infections (cumulative)',
-      data: []
-    },
-    {
-      name: 'Recovered (cumulative)',
-      data: []
-    },
-    {
-      name: 'Deaths (cumulative)',
-      data: []
-    }]
+    series: [
+      {
+        name: "Infections (cumulative)",
+        data: []
+      },
+      {
+        name: "Recovered (cumulative)",
+        data: []
+      },
+      {
+        name: "Deaths (cumulative)",
+        data: []
+      }
+    ]
   }),
 
   methods: {
@@ -235,8 +223,14 @@ export default Vue.extend({
         const today = moment(todaysDate).format("YYYY-MM-DD");
         const oldest = moment(oldestDate).format("YYYY-MM-DD");
 
-        for (let m = moment(oldest); m.isSameOrBefore(today); m.add(1, "days")) {
-          const currentMilliseconds = new Date(m.format("YYYY-MM-DD")).getTime();
+        for (
+          let m = moment(oldest);
+          m.isSameOrBefore(today);
+          m.add(1, "days")
+        ) {
+          const currentMilliseconds = new Date(
+            m.format("YYYY-MM-DD")
+          ).getTime();
           generatedDates.push([currentMilliseconds, 0]);
         }
 
@@ -249,7 +243,10 @@ export default Vue.extend({
               caseFoundOnDate = true;
 
               if (i > 0) {
-                generatedDates[i][1] = generatedDates[i][1] + generatedDates[i - 1][1] + casesByDay[j][1];
+                generatedDates[i][1] =
+                  generatedDates[i][1] +
+                  generatedDates[i - 1][1] +
+                  casesByDay[j][1];
               } else {
                 generatedDates[i][1] = generatedDates[i][1] + casesByDay[j][1];
               }
@@ -257,7 +254,8 @@ export default Vue.extend({
           }
 
           if (i > 0 && !caseFoundOnDate) {
-            generatedDates[i][1] = generatedDates[i][1] + generatedDates[i - 1][1];
+            generatedDates[i][1] =
+              generatedDates[i][1] + generatedDates[i - 1][1];
           }
         }
 

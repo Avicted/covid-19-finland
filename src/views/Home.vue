@@ -34,7 +34,7 @@
 
     <v-row>
       <v-col cols="12">
-        <p class="display-1 mb-0" style="font-family: monospace !important;">
+        <p class="display-1 mb-0 mt-5" style="font-family: monospace !important;">
           Global COVID-19 data
         </p>
       </v-col>
@@ -42,6 +42,9 @@
     <v-row>
       <v-col cols="12" sm="12" md="12">
         <GlobalCumulativeChart />
+      </v-col>
+      <v-col cols="12" sm="12" md="12">
+        <GlobalPerCountryChart />
       </v-col>
     </v-row>
   </div>
@@ -57,6 +60,7 @@ import IncreaseToday from "../components/IncreaseToday.vue";
 import CasesByDayChart from "../components/CasesByDayChart.vue";
 import CumulativeChart from "../components/CumulativeChart.vue";
 import CasesPerDistrictChart from "../components/CasesPerDistrictChart.vue";
+import GlobalPerCountryChart from "../components/GlobalPerCountryChart.vue";
 
 // @Note: not in use at the moment because the new api v2 does not provide this data
 // import InfectionSourceChart from "../components/InfectionSourceChart.vue";
@@ -78,6 +82,7 @@ export default {
     CasesByDayChart,
     CumulativeChart,
     CasesPerDistrictChart,
+    GlobalPerCountryChart,
     // InfectionSourceChart,
     // CasesByDayChartLog,
 
@@ -87,15 +92,36 @@ export default {
 </script>
 
 <style lang="sass">
+#app
+  font-family: monospace !important
+
 .apexcharts-canvas
   &.apexcharts-theme-dark
     background: transparent !important
+    .apexcharts-tooltip
+      .apexcharts-tooltip-series-group
+        padding-bottom: 5px
+        .apexcharts-tooltip-text
+          line-height: 12px
+
+.v-menu__content
+  &::-webkit-scrollbar
+    height: 8px
+    width: 8px
+
+  &::-webkit-scrollbar-track
+    background: #2b2b2b
+    border-radius: 10px
+
+  &::-webkit-scrollbar-thumb
+    background: #6f6f6f
+    border-radius: 8px
 
 .menuable__content__active
   z-index: 1000 !important
 
 .v-application
-  background: linear-gradient(#111c29, #0b1117) !important
+  background: linear-gradient(#182833, #0b0f17) !important
 
   .v-card
     background-color: rgba(12, 12, 12, 0.75)
