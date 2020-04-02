@@ -21,12 +21,12 @@
       <v-col cols="12" sm="12" md="6">
         <CumulativeChart />
       </v-col>
-      <v-col cols="12" sm="12" md="6">
+      <v-col cols="12" sm="12" md="12">
         <CasesPerDistrictChart />
       </v-col>
-      <v-col cols="12" sm="12" md="6">
+      <!-- <v-col cols="12" sm="12" md="6">
         <InfectionSourceChart />
-      </v-col>
+      </v-col> -->
       <!-- <v-col cols="12" sm="12" md="6">
         <CasesByDayChartLog />
       </v-col> -->
@@ -57,7 +57,9 @@ import IncreaseToday from "../components/IncreaseToday.vue";
 import CasesByDayChart from "../components/CasesByDayChart.vue";
 import CumulativeChart from "../components/CumulativeChart.vue";
 import CasesPerDistrictChart from "../components/CasesPerDistrictChart.vue";
-import InfectionSourceChart from "../components/InfectionSourceChart.vue";
+
+// @Note: not in use at the moment because the new api v2 does not provide this data
+// import InfectionSourceChart from "../components/InfectionSourceChart.vue";
 
 // GLobal data
 import GlobalCumulativeChart from "../components/GlobalCumulativeChart.vue";
@@ -76,7 +78,7 @@ export default {
     CasesByDayChart,
     CumulativeChart,
     CasesPerDistrictChart,
-    InfectionSourceChart,
+    // InfectionSourceChart,
     // CasesByDayChartLog,
 
     GlobalCumulativeChart
