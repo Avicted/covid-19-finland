@@ -125,4 +125,11 @@ export default {
 
   .v-card
     background-color: rgba(12, 12, 12, 0.75)
+
+#chart-style-btn
+    &::before
+      opacity: 0.08
+    &:hover
+      &::before
+        opacity: 0.16
 </style>

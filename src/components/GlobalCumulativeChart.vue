@@ -6,8 +6,8 @@
 
       <v-menu v-if="series[0].data !== null || !isLoading" bottom left>
         <template v-slot:activator="{ on }">
-          <v-btn icon v-on="on" outlined color="primary">
-            <v-icon>mdi-dots-vertical</v-icon>
+          <v-btn id="chart-style-btn" text small v-on="on" color="primary">
+            Chart style
           </v-btn>
         </template>
 
@@ -65,6 +65,9 @@ export default Vue.extend({
       chart: {
         fontFamily: "monospace",
         stacked: false,
+        animations: {
+          enabled: false
+        },
         toolbar: {
           show: true,
           tools: {
