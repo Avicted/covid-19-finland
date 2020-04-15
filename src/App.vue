@@ -53,7 +53,12 @@ export default Vue.extend({
 
   mounted() {
     store.dispatch("virusCasesFinland/fetchData");
-    store.dispatch("virusCasesGlobal/fetchData");
+
+    this.$store.subscribe(async (mutation, state) => {
+      if (mutation.type === "virusCasesFinland/DATA_FETCHED") {
+        store.dispatch("virusCasesGlobal/fetchData");
+      }
+    });
   }
 });
 </script>
