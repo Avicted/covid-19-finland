@@ -1,9 +1,11 @@
 <template>
   <v-app>
-    <!-- <v-app-bar app dense color="primary" dark>
-      
-    </v-app-bar> -->
-
+    <!-- <v-progress-linear
+      :active="isLoading"
+      :indeterminate="true"
+      :top="true"
+      color="light-blue"
+    ></v-progress-linear> -->
     <v-container>
       <v-row>
         <v-col cols="12">
@@ -51,12 +53,34 @@ import store from "./store";
 export default Vue.extend({
   name: "App",
 
+  data: () => ({
+    isLoading: true
+  }),
+
   mounted() {
-    store.dispatch("virusCasesFinland/fetchData");
+    store.dispatch("virusCasesFinland/fetchData").then(() => {
+      setTimeout(() => {
+        store.dispatch("virusCasesGlobal/fetchData");
+      }, 1000);
+    });
 
     this.$store.subscribe(async (mutation, state) => {
-      if (mutation.type === "virusCasesFinland/DATA_FETCHED") {
-        store.dispatch("virusCasesGlobal/fetchData");
+      /* if (mutation.type === "virusCasesFinland/LOADING") {
+        console.log(mutation.payload);
+        if (mutation.payload === true) {
+          this.$data.isLoading = true;
+        }
+      }
+      if (mutation.type === "virusCasesGlobal/LOADING") {
+        if (mutation.payload === false) {
+          this.$data.isLoading = false;
+        }
+      } */
+
+      if (mutation.type === "virusCasesGlobal/LOADING") {
+        if (mutation.payload === false) {
+          this.$data.isLoading = false;
+        }
       }
     });
   }
