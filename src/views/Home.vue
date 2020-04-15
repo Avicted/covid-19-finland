@@ -126,6 +126,9 @@ export default {
   .v-card
     background-color: rgba(12, 12, 12, 0.75)
 
+.v-card__title
+  font-size: 1rem
+
 #chart-style-btn
     &::before
       opacity: 0.08

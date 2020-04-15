@@ -2,53 +2,55 @@
   <v-card min-height="700px" max-height="700px">
     <v-card-title class="justify-space-between">
       Global confirmed cases (cumulative)
-      <v-spacer></v-spacer>
+      <div style="display: flex;">
+        <v-select
+          v-if="rawData !== null && !isLoading"
+          class="country-dropdown mr-6"
+          :items="countries"
+          v-model="selectedCountries"
+          :menu-props="{ maxHeight: '600' }"
+          label="Select countries"
+          v-on:input="limiter"
+          multiple
+          outlined
+          single-line
+          hint="Select countries"
+          persistent-hint
+          dense
+          style="display: inline-flex;"
+        >
+          <template v-slot:selection="{ item, index }">
+            <v-chip small v-if="index === 0">
+              <span>{{ item }}</span>
+            </v-chip>
+            <span v-if="index === 1" class="grey--text caption">
+              (+{{ selectedCountries.length - 1 }} others)
+            </span>
+          </template>
+        </v-select>
 
-      <v-select
-        v-if="rawData !== null && !isLoading"
-        class="country-dropdown mr-6"
-        :items="countries"
-        v-model="selectedCountries"
-        :menu-props="{ maxHeight: '600' }"
-        label="Select countries"
-        v-on:input="limiter"
-        multiple
-        outlined
-        single-line
-        hint="Select countries"
-        persistent-hint
-        dense
-      >
-        <template v-slot:selection="{ item, index }">
-          <v-chip small v-if="index === 0">
-            <span>{{ item }}</span>
-          </v-chip>
-          <span v-if="index === 1" class="grey--text caption">
-            (+{{ selectedCountries.length - 1 }} others)
-          </span>
-        </template>
-      </v-select>
+        <v-menu v-if="rawData !== null && !isLoading" bottom left style="display: inline-flex;">
+          <template v-slot:activator="{ on }">
+            <v-btn id="chart-style-btn" text small v-on="on" color="primary">
+              Chart style
+            </v-btn>
+          </template>
 
-      <v-menu v-if="rawData !== null && !isLoading" bottom left>
-        <template v-slot:activator="{ on }">
-          <v-btn id="chart-style-btn" text small v-on="on" color="primary">
-            Chart style
-          </v-btn>
-        </template>
+          <v-list>
+            <v-list-item
+              v-for="(item, i) in chartStyles"
+              :key="i"
+              @click="updateChartType(item)"
+              dense
+              color="primary"
+              :class="[item === type ? 'v-list-item--active' : '']"
+            >
+              <v-list-item-title>{{ item }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
 
-        <v-list>
-          <v-list-item
-            v-for="(item, i) in chartStyles"
-            :key="i"
-            @click="updateChartType(item)"
-            dense
-            color="primary"
-            :class="[item === type ? 'v-list-item--active' : '']"
-          >
-            <v-list-item-title>{{ item }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
+      </div>
     </v-card-title>
 
     <v-progress-circular
@@ -403,6 +405,6 @@ export default Vue.extend({
 
 @media (max-width: 700px)
   .country-dropdown
-    max-width: 65%
+    max-width: 100%
     margin-right: 0
 </style>
