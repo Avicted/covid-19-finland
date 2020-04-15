@@ -31,8 +31,8 @@
 
       <v-menu v-if="rawData !== null && !isLoading" bottom left>
         <template v-slot:activator="{ on }">
-          <v-btn icon v-on="on" outlined color="primary">
-            <v-icon>mdi-dots-vertical</v-icon>
+          <v-btn id="chart-style-btn" text small v-on="on" color="primary">
+            Chart style
           </v-btn>
         </template>
 
@@ -121,6 +121,9 @@ export default Vue.extend({
       chart: {
         fontFamily: "monospace",
         stacked: false,
+        animations: {
+          enabled: false
+        },
         toolbar: {
           show: true,
           tools: {
@@ -134,9 +137,6 @@ export default Vue.extend({
           }
         },
         selection: {
-          enabled: false
-        },
-        animations: {
           enabled: false
         }
       },
@@ -403,6 +403,6 @@ export default Vue.extend({
 
 @media (max-width: 700px)
   .country-dropdown
-    max-width: 80%
+    max-width: 65%
     margin-right: 0
 </style>

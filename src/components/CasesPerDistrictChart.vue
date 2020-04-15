@@ -57,6 +57,9 @@ export default Vue.extend({
       chart: {
         fontFamily: "monospace",
         stacked: false,
+        animations: {
+          enabled: false
+        },
         type: "bar",
         toolbar: {
           show: false
