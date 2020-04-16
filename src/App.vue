@@ -59,9 +59,11 @@ export default Vue.extend({
 
   mounted() {
     store.dispatch("virusCasesFinland/fetchData").then(() => {
-      setTimeout(() => {
-        store.dispatch("virusCasesGlobal/fetchData");
-      }, 1000);
+      store.dispatch("virusCasesFinland/fetchHcdTestData").then(() => {
+        setTimeout(() => {
+          store.dispatch("virusCasesGlobal/fetchData");
+        }, 1000);
+      });
     });
 
     this.$store.subscribe(async (mutation, state) => {
