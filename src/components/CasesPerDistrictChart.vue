@@ -55,7 +55,7 @@ export default Vue.extend({
         "#a1887f"
       ],
       chart: {
-        fontFamily: "monospace",
+        fontFamily: "Roboto",
         stacked: false,
         animations: {
           enabled: false

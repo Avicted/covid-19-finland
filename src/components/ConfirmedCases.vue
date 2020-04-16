@@ -64,8 +64,4 @@ export default Vue.extend({
   display: block
   width: 100px
   margin: 0 auto
-
-.v-card__text
-  p
-    font-family: monospace !important
 </style>

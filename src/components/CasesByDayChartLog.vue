@@ -70,7 +70,7 @@ export default Vue.extend({
       },
       colors: ["#ce93d8", "#81c784", "#e57373"],
       chart: {
-        fontFamily: "monospace",
+        fontFamily: "Roboto",
         stacked: false,
         animations: {
           enabled: false

@@ -4,6 +4,7 @@ const getDefaultState = () => {
         deaths: null,
         recovered: null,
         isLoading: false,
+        hcdTestData: null,
     }
 }
 
@@ -15,6 +16,7 @@ const getters = {
     confirmed: (state: any) => state.confirmed,
     deaths: (state: any) => state.deaths,
     recovered: (state: any) => state.recovered,
+    hcdTestData: (state: any) => state.hcdTestData,
 }
 
 
@@ -31,6 +33,17 @@ const actions = {
                 resolve();
             })
         })
+    },
+
+    fetchHcdTestData({ commit }: any) {
+        return new Promise((resolve, reject) => {
+            fetch("https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/hcdTestData")
+            .then(response => response.json() as Promise<any[]>)
+            .then((response) => {
+                commit("HCD_TEST_DATA_FETCHED", response);
+                resolve();
+            })
+        })
     }
 }
 
@@ -38,6 +51,9 @@ const actions = {
 const mutations = {
     LOADING(state: any, payload: boolean) {
         state.isLoading = payload;
+    },
+    HCD_TEST_DATA_FETCHED(state: any, payload: any) {
+        state.hcdTestData = payload;
     },
     DATA_FETCHED(state: any, payload: any) {
         state.confirmed = payload.confirmed;

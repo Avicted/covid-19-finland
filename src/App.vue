@@ -9,7 +9,7 @@
     <v-container>
       <v-row>
         <v-col cols="12">
-          <p class="display-1 mb-0" style="font-family: monospace !important;">
+          <p class="display-1 mb-0 font-weight-light">
             Finland COVID-19 data
           </p>
         </v-col>
@@ -59,9 +59,11 @@ export default Vue.extend({
 
   mounted() {
     store.dispatch("virusCasesFinland/fetchData").then(() => {
-      setTimeout(() => {
-        store.dispatch("virusCasesGlobal/fetchData");
-      }, 1000);
+      store.dispatch("virusCasesFinland/fetchHcdTestData").then(() => {
+        setTimeout(() => {
+          store.dispatch("virusCasesGlobal/fetchData");
+        }, 1000);
+      });
     });
 
     this.$store.subscribe(async (mutation, state) => {

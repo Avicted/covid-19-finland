@@ -136,5 +136,5 @@ export default Vue.extend({
 
 .v-card__text
   p
-    font-family: monospace !important
+    font-family: Roboto !important
 </style>
