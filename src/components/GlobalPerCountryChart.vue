@@ -121,7 +121,7 @@ export default Vue.extend({
         "#a1887f"
       ],
       chart: {
-        fontFamily: "monospace",
+        fontFamily: "Roboto",
         stacked: false,
         animations: {
           enabled: false
@@ -379,7 +379,7 @@ export default Vue.extend({
               style: {
                 color: "#ffb74d",
                 fontSize: "16px",
-                fontFamily: "monospace"
+                fontFamily: "Roboto"
               }
             }
           }

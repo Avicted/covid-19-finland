@@ -34,7 +34,7 @@
 
     <v-row>
       <v-col cols="12">
-        <p class="display-1 mb-0 mt-5" style="font-family: monospace !important;">
+        <p class="display-1 mb-0 mt-5 font-weight-light">
           Global COVID-19 data
         </p>
       </v-col>
@@ -92,13 +92,12 @@ export default {
 </script>
 
 <style lang="sass">
-#app
-  font-family: monospace !important
-
 .apexcharts-canvas
   &.apexcharts-theme-dark
     background: transparent !important
     .apexcharts-tooltip
+      background-color: #0c111f !important
+      box-shadow: none !important
       .apexcharts-tooltip-series-group
         padding-bottom: 5px
         .apexcharts-tooltip-text
@@ -116,18 +115,22 @@ export default {
   &::-webkit-scrollbar-thumb
     background: #6f6f6f
     border-radius: 8px
+  .v-list
+    background-color: #0c111f !important
+
 
 .menuable__content__active
   z-index: 1000 !important
 
 .v-application
-  background: linear-gradient(#182833, #0b0f17) !important
+  background-color: rgba(12, 17, 31 , 1) !important
 
   .v-card
-    background-color: rgba(12, 12, 12, 0.75)
+    background-color: rgba(18, 23, 41, 1)
 
 .v-card__title
   font-size: 1rem
+  font-weight: 400
 
 #chart-style-btn
     &::before

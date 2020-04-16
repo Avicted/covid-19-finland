@@ -9,7 +9,7 @@
     <v-container>
       <v-row>
         <v-col cols="12">
-          <p class="display-1 mb-0" style="font-family: monospace !important;">
+          <p class="display-1 mb-0 font-weight-light">
             Finland COVID-19 data
           </p>
         </v-col>
