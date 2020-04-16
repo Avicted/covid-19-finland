@@ -1,17 +1,23 @@
 <template>
   <div class="home">
     <v-row>
-      <v-col cols="12" sm="12" md="6" xl="3">
+      <v-col cols="12" sm="12" md="6" xl="2">
         <ConfirmedCases />
       </v-col>
-      <v-col cols="12" sm="12" md="6" xl="3">
+      <v-col cols="12" sm="12" md="6" xl="2">
         <RecoveredCases />
       </v-col>
-      <v-col cols="12" sm="12" md="6" xl="3">
+      <v-col cols="12" sm="12" md="6" xl="2">
         <DeathCases />
       </v-col>
-      <v-col cols="12" sm="12" md="6" xl="3">
+      <v-col cols="12" sm="12" md="6" xl="2">
         <IncreaseToday />
+      </v-col>
+      <v-col cols="12" sm="12" md="6" xl="2">
+        <PercentageOfPopulationTested />
+      </v-col>
+      <v-col cols="12" sm="12" md="6" xl="2">
+        <CasesTested />
       </v-col>
     </v-row>
     <v-row>
@@ -56,6 +62,8 @@ import ConfirmedCases from "../components/ConfirmedCases.vue";
 import RecoveredCases from "../components/RecoveredCases.vue";
 import DeathCases from "../components/DeathCases.vue";
 import IncreaseToday from "../components/IncreaseToday.vue";
+import PercentageOfPopulationTested from "../components/PercentateOfPopulationTested.vue";
+import CasesTested from "../components/CasesTested.vue";
 
 import CasesByDayChart from "../components/CasesByDayChart.vue";
 import CumulativeChart from "../components/CumulativeChart.vue";
@@ -78,6 +86,8 @@ export default {
     RecoveredCases,
     DeathCases,
     IncreaseToday,
+    PercentageOfPopulationTested,
+    CasesTested,
 
     CasesByDayChart,
     CumulativeChart,
