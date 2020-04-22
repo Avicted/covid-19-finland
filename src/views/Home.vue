@@ -28,6 +28,12 @@
         <CumulativeChart />
       </v-col>
       <v-col cols="12" sm="12" md="6">
+        <TestsByDayChart />
+      </v-col>
+      <v-col cols="12" sm="12" md="6">
+        <CumulativeTests />
+      </v-col>
+      <v-col cols="12" sm="12" md="6">
         <CasesPerDistrictChart />
       </v-col>
       <v-col cols="12" sm="12" md="6">
@@ -70,6 +76,8 @@ import CasesTested from "../components/CasesTested.vue";
 
 import CasesByDayChart from "../components/CasesByDayChart.vue";
 import CumulativeChart from "../components/CumulativeChart.vue";
+import TestsByDayChart from "../components/TestsByDayChart.vue";
+import CumulativeTests from "../components/CumulativeTests.vue";
 import CasesPerDistrictChart from "../components/CasesPerDistrictChart.vue";
 import TestedPerDistrictChart from "../components/TestedPerDistrictChart.vue";
 import GlobalPerCountryChart from "../components/GlobalPerCountryChart.vue";
@@ -95,6 +103,8 @@ export default {
 
     CasesByDayChart,
     CumulativeChart,
+    TestsByDayChart,
+    CumulativeTests,
     CasesPerDistrictChart,
     TestedPerDistrictChart,
     GlobalPerCountryChart,

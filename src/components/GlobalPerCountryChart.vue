@@ -195,8 +195,11 @@ export default Vue.extend({
               return;
             }
 
-            if (value > 1000) {
-              const result = (value / 1000).toFixed(0);
+            if (value > 1000000) {
+              const result = (value / 1000000).toFixed(2);
+              return `${result}M`;
+            } else if (value > 1000) {
+              const result = (value / 1000).toFixed(2);
               return `${result}k`;
             } else {
               return value;

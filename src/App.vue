@@ -57,34 +57,36 @@ export default Vue.extend({
     isLoading: true
   }),
 
-  mounted() {
-    store.dispatch("virusCasesFinland/fetchData").then(() => {
-      store.dispatch("virusCasesFinland/fetchHcdTestData").then(() => {
-        setTimeout(() => {
-          store.dispatch("virusCasesGlobal/fetchData");
-        }, 1000);
-      });
-    });
+  async mounted() {
+    await Promise.all([
+      store.dispatch("virusCasesFinland/fetchData"),
+      store.dispatch("virusCasesFinland/fetchHcdTestData"),
+      store.dispatch("virusCasesFinland/fetchThlTestData")
+    ]);
 
-    this.$store.subscribe(async (mutation, state) => {
-      /* if (mutation.type === "virusCasesFinland/LOADING") {
-        console.log(mutation.payload);
-        if (mutation.payload === true) {
-          this.$data.isLoading = true;
-        }
-      }
+    setTimeout(() => {
+      store.dispatch("virusCasesGlobal/fetchData");
+    }, 1000);
+
+    /* this.$store.subscribe(async (mutation, state) => {
+      // if (mutation.type === "virusCasesFinland/LOADING") {
+      //   console.log(mutation.payload);
+      //   if (mutation.payload === true) {
+      //     this.$data.isLoading = true;
+      //   }
+      // }
+      // if (mutation.type === "virusCasesGlobal/LOADING") {
+      //   if (mutation.payload === false) {
+      //     this.$data.isLoading = false;
+      //   }
+      // }
+
       if (mutation.type === "virusCasesGlobal/LOADING") {
         if (mutation.payload === false) {
           this.$data.isLoading = false;
         }
-      } */
-
-      if (mutation.type === "virusCasesGlobal/LOADING") {
-        if (mutation.payload === false) {
-          this.$data.isLoading = false;
-        }
       }
-    });
+    }); */
   }
 });
 </script>

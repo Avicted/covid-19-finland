@@ -66,6 +66,8 @@ export default Vue.extend({
       },
       colors: ["#ce93d8", "#81c784", "#e57373"],
       chart: {
+        id: "cases-by-day-cumulative",
+        // group: "covid-cases",
         fontFamily: "Roboto",
         stacked: false,
         animations: {
@@ -95,6 +97,19 @@ export default Vue.extend({
             color: "#b6b6b6",
             width: 1,
             dashArray: 3
+          }
+        }
+      },
+      yaxis: {
+        labels: {
+          minWidth: 40,
+          formatter: function(value: number) {
+            if (value > 1000) {
+              const result = (value / 1000).toFixed(0);
+              return `${result}k`;
+            } else {
+              return value;
+            }
           }
         }
       },
@@ -257,8 +272,7 @@ export default Vue.extend({
           }
 
           if (i > 0 && !caseFoundOnDate) {
-            generatedDates[i][1] =
-              generatedDates[i][1] + generatedDates[i - 1][1];
+            generatedDates[i][1] = generatedDates[i][1] + generatedDates[i - 1][1];
           }
         }
 
@@ -274,9 +288,11 @@ export default Vue.extend({
 
     this.$store.subscribe(async (mutation, state) => {
       if (mutation.type === "virusCasesFinland/DATA_FETCHED") {
-        await this.fetchData("confirmed");
-        await this.fetchData("recovered");
-        await this.fetchData("deaths");
+        await Promise.all([
+          this.fetchData("confirmed"),
+          this.fetchData("recovered"),
+          this.fetchData("deaths")
+        ]);
 
         this.$data.isLoading = false;
       }
