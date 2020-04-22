@@ -124,7 +124,10 @@ export default Vue.extend({
         followCursor: true,
         y: {
           formatter: function(value: number) {
-            if (value > 1000) {
+            if (value > 1000000) {
+              const result = (value / 1000000).toFixed(2);
+              return `${result}M`;
+            } else if (value > 1000) {
               const result = (value / 1000).toFixed(2);
               return `${result}k`;
             } else {

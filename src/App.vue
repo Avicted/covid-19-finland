@@ -1,11 +1,14 @@
 <template>
   <v-app>
-    <!-- <v-progress-linear
+    <v-progress-linear
       :active="isLoading"
-      :indeterminate="true"
+      :indeterminate="false"
       :top="true"
-      color="light-blue"
-    ></v-progress-linear> -->
+      :value="loadingValue"
+      :buffer-value="0"
+      :stream="true"
+      color="primary"
+    ></v-progress-linear>
     <v-container>
       <v-row>
         <v-col cols="12">
@@ -54,37 +57,27 @@ export default Vue.extend({
   name: "App",
 
   data: () => ({
-    isLoading: true
+    isLoading: false,
+    loadingValue: 0
   }),
 
-  mounted() {
-    store.dispatch("virusCasesFinland/fetchData").then(() => {
-      store.dispatch("virusCasesFinland/fetchHcdTestData").then(() => {
-        setTimeout(() => {
-          store.dispatch("virusCasesGlobal/fetchData");
-        }, 1000);
+  async mounted() {
+    this.$data.isLoading = true;
+
+    await Promise.all([
+      store.dispatch("virusCasesFinland/fetchData"),
+      store.dispatch("virusCasesFinland/fetchHcdTestData"),
+      store.dispatch("virusCasesFinland/fetchThlTestData")
+    ]);
+
+    this.$data.loadingValue = 75;
+
+    setTimeout(() => {
+      store.dispatch("virusCasesGlobal/fetchData").then(() => {
+        this.$data.loadingValue = 100;
+        this.$data.isLoading = false;
       });
-    });
-
-    this.$store.subscribe(async (mutation, state) => {
-      /* if (mutation.type === "virusCasesFinland/LOADING") {
-        console.log(mutation.payload);
-        if (mutation.payload === true) {
-          this.$data.isLoading = true;
-        }
-      }
-      if (mutation.type === "virusCasesGlobal/LOADING") {
-        if (mutation.payload === false) {
-          this.$data.isLoading = false;
-        }
-      } */
-
-      if (mutation.type === "virusCasesGlobal/LOADING") {
-        if (mutation.payload === false) {
-          this.$data.isLoading = false;
-        }
-      }
-    });
+    }, 1000);
   }
 });
 </script>

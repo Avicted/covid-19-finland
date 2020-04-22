@@ -1,7 +1,7 @@
 <template>
   <v-card id="card">
     <v-card-title>
-      Infections by health care district
+      Tests by health care district
     </v-card-title>
 
     <v-progress-circular
@@ -27,7 +27,7 @@ import Vue from "vue";
 import store from "../store";
 
 export default Vue.extend({
-  name: "CasesPerDistrictChart",
+  name: "TestedPerDistrictChart",
 
   data: () => ({
     isLoading: true,
@@ -129,61 +129,22 @@ export default Vue.extend({
   }),
 
   methods: {
-    fetchCasesPerHealthCareDistrict() {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const casesPerHealthCareDistrict: string | any[] = [];
+    fetchTestsPerHealthCareDistrict() {
+      const healthCareDistrictData = store.getters["virusCasesFinland/hcdTestData"];
 
-      const confirmedCases = store.getters["virusCasesFinland/confirmed"];
-      const confirmedCasesCount = confirmedCases.length;
-
-      for (let i = 0; i < confirmedCasesCount; i++) {
-        let found = false;
-
-        for (let j = 0; j < casesPerHealthCareDistrict.length; j++) {
-          if (confirmedCases[i].healthCareDistrict === null) {
-            confirmedCases[i].healthCareDistrict = "Unknown";
-          }
-
-          if (confirmedCases[i].healthCareDistrict === casesPerHealthCareDistrict[j].healthCareDistrict) {
-            found = true;
-            casesPerHealthCareDistrict[j].count = casesPerHealthCareDistrict[j].count + 1;
-            break;
-          }
+      for (const district in healthCareDistrictData) {
+        if (district === "Kaikki sairaanhoitopiirit") {
+          continue;
         }
 
-        if (!found) {
-          casesPerHealthCareDistrict.push({
-            healthCareDistrict: confirmedCases[i].healthCareDistrict,
-            count: 1
-          });
-        }
-      }
-
-      // Add the count to the name of the healthCareDistrict
-      const labels: string[] = [];
-      const series: number[] = [];
-
-      for (let i = 0; i < casesPerHealthCareDistrict.length; i++) {
-        const healthCareDistrict =
-          casesPerHealthCareDistrict[i].healthCareDistrict;
-        const count = casesPerHealthCareDistrict[i].count;
-
-        // eslint-disable-next-line prettier/prettier
-        casesPerHealthCareDistrict[i].healthCareDistrict = `${healthCareDistrict}`;
-        labels.push(casesPerHealthCareDistrict[i].healthCareDistrict);
-        series.push(count);
-      }
-
-      // Create data series
-      this.$data.options.xaxis.categories = labels;
-      // this.$data.options.xaxis.tickAmount = labels.length;
-
-      for (let i = 0; i < labels.length; i++) {
+        const districtName = district;
+        const districtTestCases = healthCareDistrictData[district].tested;
         const newDataSeries = {
-          name: labels[i],
-          data: [series[i]]
+          name: districtName,
+          data: [districtTestCases]
         };
 
+        this.$data.options.xaxis.categories.push(districtName);
         this.$data.series.push(newDataSeries);
       }
 
@@ -196,15 +157,15 @@ export default Vue.extend({
 
     if (
       this.$data.series === null &&
-      store.getters["virusCasesFinland/confirmed"] !== null
+      store.getters["virusCasesFinland/hcdTestData"] !== null
     ) {
-      this.fetchCasesPerHealthCareDistrict();
+      this.fetchTestsPerHealthCareDistrict();
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "virusCasesFinland/DATA_FETCHED") {
-        this.fetchCasesPerHealthCareDistrict();
+      if (mutation.type === "virusCasesFinland/HCD_TEST_DATA_FETCHED") {
+        this.fetchTestsPerHealthCareDistrict();
       }
     });
   }

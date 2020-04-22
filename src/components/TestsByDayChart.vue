@@ -1,7 +1,7 @@
 <template>
   <v-card id="card">
     <v-card-title>
-      Cases by day
+      Tests by day
 
       <v-spacer></v-spacer>
 
@@ -55,7 +55,7 @@ import moment from "moment";
 import VueApexCharts from "vue-apexcharts";
 
 export default Vue.extend({
-  name: "CasesByDayChart",
+  name: "TestsByDayChart",
 
   components: {
     apexchart: VueApexCharts
@@ -72,10 +72,9 @@ export default Vue.extend({
       theme: {
         mode: "dark"
       },
-      colors: ["#ce93d8", "#81c784", "#e57373", "#ffd54f"],
+      colors: ["#ffd54f"],
       chart: {
-        id: "cases-by-day",
-        // group: "covid-cases",
+        id: "chart",
         fontFamily: "Roboto",
         stacked: false,
         animations: {
@@ -110,7 +109,15 @@ export default Vue.extend({
       },
       yaxis: {
         labels: {
-          minWidth: 40
+          minWidth: 40,
+          formatter: function(value: number) {
+            if (value > 1000) {
+              const result = (value / 1000).toFixed(0);
+              return `${result}k`;
+            } else {
+              return value;
+            }
+          }
         }
       },
       plotOptions: {
@@ -123,8 +130,8 @@ export default Vue.extend({
         show: true,
         curve: "straight",
         colors: undefined,
-        width: [2, 2, 2, 2],
-        dashArray: [0, 0, 0, 0]
+        width: 2,
+        dashArray: 0
       },
       dataLabels: {
         enabled: false
@@ -144,21 +151,9 @@ export default Vue.extend({
     },
     series: [
       {
-        name: "New infections",
-        data: []
-      },
-      {
-        name: "Recovered",
-        data: []
-      },
-      {
-        name: "Deaths",
-        data: []
-      },
-      /* {
         name: "Tests",
         data: []
-      } */
+      }
     ]
   }),
 
@@ -170,20 +165,16 @@ export default Vue.extend({
     async fetchData(caseType: string) {
       return new Promise((resolve, reject) => {
         let selectedCaseType = "";
-        let seriesId = 0;
 
         switch (caseType) {
           case "confirmed":
             selectedCaseType = "confirmed";
-            seriesId = 0;
             break;
           case "recovered":
             selectedCaseType = "recovered";
-            seriesId = 1;
             break;
           case "deaths":
             selectedCaseType = "deaths";
-            seriesId = 2;
             break;
           default:
             break;
@@ -197,15 +188,6 @@ export default Vue.extend({
         const confirmedCases = store.getters["virusCasesFinland/confirmed"];
         const confirmedCasesCount = confirmedCases.length;
 
-        const cases = store.getters[`virusCasesFinland/${selectedCaseType}`];
-        const casesCount = cases.length;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const casesByDay: any = [];
-
-        const generatedDates = [];
-        const todaysDate = new Date().toISOString();
-        // const oldestDate = new Date().toISOString();
-
         for (let i = 0; i < confirmedCasesCount; i++) {
           const datetime = confirmedCases[i].date;
           const date = new Date(datetime).toISOString().substr(0, 10);
@@ -216,54 +198,6 @@ export default Vue.extend({
             this.$data.oldestDate = datetime;
           }
         }
-
-        for (let i = 0; i < casesCount; i++) {
-          const datetime = cases[i].date;
-          const date = new Date(datetime).toISOString().substr(0, 10);
-          const milliseconds = new Date(date).getTime();
-
-          // Is the current date already stored? If so, increment the case count
-          const processedDatesCount = casesByDay.length;
-          let dateAlreadyProcessed = false;
-
-          for (let i = 0; i < processedDatesCount; i++) {
-            const currentMilliseconds = casesByDay[i][0];
-
-            if (currentMilliseconds === milliseconds) {
-              casesByDay[i][1] = casesByDay[i][1] + 1;
-              dateAlreadyProcessed = true;
-              break;
-            }
-          }
-
-          // If not store it
-          if (!dateAlreadyProcessed) {
-            casesByDay.push([milliseconds, 1]);
-          }
-        }
-
-        // Generate missing dates
-        const today = moment(todaysDate).format("YYYY-MM-DD");
-        const oldest = moment(this.$data.oldestDate).format("YYYY-MM-DD");
-
-        for (let m = moment(oldest); m.isSameOrBefore(today); m.add(1, "days")) {
-          const currentMilliseconds = new Date(
-            m.format("YYYY-MM-DD")
-          ).getTime();
-          generatedDates.push([currentMilliseconds, 0]);
-        }
-
-        // Assign the data to the generated dates
-        for (let i = 0; i < generatedDates.length; i++) {
-          for (let j = 0; j < casesByDay.length; j++) {
-            const currentCaseDate = casesByDay[j][0];
-            if (currentCaseDate === generatedDates[i][0]) {
-              generatedDates[i][1] = generatedDates[i][1] + casesByDay[j][1];
-            }
-          }
-        }
-
-        this.$data.series[seriesId].data = generatedDates;
 
         resolve();
       });
@@ -305,7 +239,7 @@ export default Vue.extend({
           }
         }
 
-        this.$data.series[3].data = generatedDates;
+        this.$data.series[0].data = generatedDates;
 
         resolve();
       });
@@ -333,8 +267,8 @@ export default Vue.extend({
 
         this.$data.isLoadingData = false;
 
-        /* await this.fetchThlTestData();
-        this.$data.isLoadingThlTestData = false; */
+        await this.fetchThlTestData();
+        this.$data.isLoadingThlTestData = false;
 
         this.$data.isLoading = false;
       }
